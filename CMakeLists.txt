@@ -1,6 +1,8 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.14)
 
 project(gehmboi)
+
+add_subdirectory(tests)
 
 find_package(fmt CONFIG REQUIRED)
 

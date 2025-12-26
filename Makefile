@@ -1,4 +1,4 @@
-.PHONY: init help build run clean bootstrap check-format format-inline
+.PHONY: init help build run clean bootstrap check-format format-inline test
 
 # Default variables (can be overridden via command line)
 CMAKE ?= cmake
@@ -45,6 +45,10 @@ format-inline:
 	@printf "Applying clang-format for commit: $(BASE)\n"
 	@git clang-format --style=file --commit $(BASE)
 
+test:
+	@printf "Running tests:\n"
+	@$(BUILD_DIR)/tests/tests
+
 help:
 	@printf "Usage: make init [CMAKE=cmake] [CMAKE_MAKE_PROGRAM=ninja] [C_COMPILER=gcc] [CXX_COMPILER=g++] [PRESET=default]\n"
 	@printf "       make build [BUILD_DIR=build]\n"
@@ -53,4 +57,5 @@ help:
 	@printf "       make bootstrap [VCPKG_DIR=vcpkg] # clone vcpkg repo into directory\n"
 	@printf "       make check-format [BASE=<sha>]  # run git clang-format --commit <sha> --diff (defaults to HEAD)\n"
 	@printf "       make format-inline [BASE=<sha>]   # apply git clang-format --commit <sha> -f (defaults to HEAD)\n"
+	@printf "       make test [BUILD_DIR=build]      # run tests executable at build/tests/tests\n"
 
