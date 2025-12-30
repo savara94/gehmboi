@@ -1,0 +1,104 @@
+#include "cpu_ops.hpp"
+
+#include <stdexcept>
+
+using namespace gehmboi::emulator;
+
+CPUOperationOperand::CPUOperationOperand() {
+  m_Type = CPUOperandTypeEnum::NO_OPERAND;
+  m_IsDereferenced = false;
+}
+
+CPUOperationOperand CPUOperationOperand::createNoOperand() {
+  auto op = CPUOperationOperand();
+
+  op.m_Type = CPUOperandTypeEnum::NO_OPERAND;
+
+  return op;
+}
+
+CPUOperationOperand
+CPUOperationOperand::createReg8Operand(CPURegister8Enum reg8,
+                                       bool isDereferenced) {
+  auto op = CPUOperationOperand();
+
+  op.m_Type = CPUOperandTypeEnum::R8;
+  op.m_Value.reg8 = reg8;
+  op.m_IsDereferenced = isDereferenced;
+
+  return op;
+}
+
+CPUOperationOperand
+CPUOperationOperand::createReg16Operand(CPURegister16Enum reg16,
+                                        bool isDereferenced) {
+  auto op = CPUOperationOperand();
+
+  op.m_Type = CPUOperandTypeEnum::R16;
+  op.m_Value.reg16 = reg16;
+  op.m_IsDereferenced = isDereferenced;
+
+  return op;
+}
+
+CPUOperationOperand CPUOperationOperand::createImm8Operand(uint8_t imm8) {
+  auto op = CPUOperationOperand();
+
+  op.m_Type = CPUOperandTypeEnum::IMM8;
+  op.m_Value.imm8 = imm8;
+
+  return op;
+}
+
+CPUOperationOperand CPUOperationOperand::createImm16Operand(uint16_t imm16) {
+  auto op = CPUOperationOperand();
+
+  op.m_Type = CPUOperandTypeEnum::IMM16;
+  op.m_Value.imm16 = imm16;
+
+  return op;
+}
+
+CPUOperandTypeEnum CPUOperationOperand::getType() const noexcept {
+  return m_Type;
+}
+
+bool CPUOperationOperand::isDereferenced() const noexcept {
+  return m_IsDereferenced;
+}
+
+CPURegister8Enum CPUOperationOperand::getReg8() const {
+  if (m_Type != CPUOperandTypeEnum::R8) {
+    throw std::runtime_error(
+        "CPUOperationOperand: Operand is not of m_Type R8");
+  }
+
+  return m_Value.reg8;
+}
+
+CPURegister16Enum CPUOperationOperand::getReg16() const {
+  if (m_Type != CPUOperandTypeEnum::R16) {
+    throw std::runtime_error(
+        "CPUOperationOperand: Operand is not of m_Type R16");
+  }
+
+  return m_Value.reg16;
+}
+
+uint8_t CPUOperationOperand::getImm8() const {
+  if (m_Type != CPUOperandTypeEnum::IMM8) {
+    throw std::runtime_error(
+        "CPUOperationOperand: Operand is not of m_Type IMM8");
+  }
+
+  return m_Value.imm8;
+}
+
+uint16_t CPUOperationOperand::getImm16() const {
+  if (m_Type != CPUOperandTypeEnum::IMM16) {
+    throw std::runtime_error(
+        "CPUOperationOperand: Operand is not of m_Type IMM16");
+  }
+
+  return m_Value.imm16;
+}

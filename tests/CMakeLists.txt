@@ -17,5 +17,17 @@ target_link_libraries(
   GTest::gtest_main
 )
 
+add_executable(
+  cpu_tests
+  emulator/cpu/cpu_registers_test.cpp
+  emulator/cpu/cpu_opcode_test.cpp
+)
+
+target_link_libraries(
+  cpu_tests
+  emulator
+  GTest::gtest_main
+)
+
 include(GoogleTest)
 gtest_discover_tests(tests)
