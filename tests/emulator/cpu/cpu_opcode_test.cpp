@@ -1228,6 +1228,94 @@ TEST(CpuOpcode, CpuOpcode_CP_A_R8) {
 
 // Block 3
 
+TEST(CPUOpcode, CpuOpcode_ADD_A_IMM8) {
+  auto operation = Opcode::decode(0xC6, false);
+
+  EXPECT_EQ(operation.op, CPUOperationTypeEnum::BLOCK_3_ADD_A_IMM8);
+  EXPECT_EQ(operation.operand1.getType(), CPUOperandTypeEnum::R8);
+  EXPECT_EQ(operation.operand1.getReg8(), CPURegister8Enum::A);
+
+  EXPECT_EQ(operation.operand2.getType(), CPUOperandTypeEnum::IMM8);
+  EXPECT_FALSE(operation.operand2.isDereferenced());
+}
+
+TEST(CpuOpcode, CpuOpcode_ADC_A_IMM8) {
+  auto operation = Opcode::decode(0xCE, false);
+
+  EXPECT_EQ(operation.op, CPUOperationTypeEnum::BLOCK_3_ADC_A_IMM8);
+  EXPECT_EQ(operation.operand1.getType(), CPUOperandTypeEnum::R8);
+  EXPECT_EQ(operation.operand1.getReg8(), CPURegister8Enum::A);
+
+  EXPECT_EQ(operation.operand2.getType(), CPUOperandTypeEnum::IMM8);
+  EXPECT_FALSE(operation.operand2.isDereferenced());
+}
+
+TEST(CpuOpcode, CpuOpcode_SUB_A_IMM8) {
+  auto operation = Opcode::decode(0xD6, false);
+
+  EXPECT_EQ(operation.op, CPUOperationTypeEnum::BLOCK_3_SUB_A_IMM8);
+  EXPECT_EQ(operation.operand1.getType(), CPUOperandTypeEnum::R8);
+  EXPECT_EQ(operation.operand1.getReg8(), CPURegister8Enum::A);
+
+  EXPECT_EQ(operation.operand2.getType(), CPUOperandTypeEnum::IMM8);
+  EXPECT_FALSE(operation.operand2.isDereferenced());
+}
+
+TEST(CpuOpcode, CpuOpcode_SBC_A_IMM8) {
+  auto operation = Opcode::decode(0xDE, false);
+
+  EXPECT_EQ(operation.op, CPUOperationTypeEnum::BLOCK_3_SBC_A_IMM8);
+  EXPECT_EQ(operation.operand1.getType(), CPUOperandTypeEnum::R8);
+  EXPECT_EQ(operation.operand1.getReg8(), CPURegister8Enum::A);
+
+  EXPECT_EQ(operation.operand2.getType(), CPUOperandTypeEnum::IMM8);
+  EXPECT_FALSE(operation.operand2.isDereferenced());
+}
+
+TEST(CpuOpcode, CpuOpcode_AND_A_IMM8) {
+  auto operation = Opcode::decode(0xE6, false);
+
+  EXPECT_EQ(operation.op, CPUOperationTypeEnum::BLOCK_3_AND_A_IMM8);
+  EXPECT_EQ(operation.operand1.getType(), CPUOperandTypeEnum::R8);
+  EXPECT_EQ(operation.operand1.getReg8(), CPURegister8Enum::A);
+
+  EXPECT_EQ(operation.operand2.getType(), CPUOperandTypeEnum::IMM8);
+  EXPECT_FALSE(operation.operand2.isDereferenced());
+}
+
+TEST(CpuOpcode, CpuOpcode_XOR_A_IMM8) {
+  auto operation = Opcode::decode(0xEE, false);
+
+  EXPECT_EQ(operation.op, CPUOperationTypeEnum::BLOCK_3_XOR_A_IMM8);
+  EXPECT_EQ(operation.operand1.getType(), CPUOperandTypeEnum::R8);
+  EXPECT_EQ(operation.operand1.getReg8(), CPURegister8Enum::A);
+
+  EXPECT_EQ(operation.operand2.getType(), CPUOperandTypeEnum::IMM8);
+  EXPECT_FALSE(operation.operand2.isDereferenced());
+}
+
+TEST(CpuOpcode, CpuOpcode_OR_A_IMM8) {
+  auto operation = Opcode::decode(0xF6, false);
+
+  EXPECT_EQ(operation.op, CPUOperationTypeEnum::BLOCK_3_OR_A_IMM8);
+  EXPECT_EQ(operation.operand1.getType(), CPUOperandTypeEnum::R8);
+  EXPECT_EQ(operation.operand1.getReg8(), CPURegister8Enum::A);
+
+  EXPECT_EQ(operation.operand2.getType(), CPUOperandTypeEnum::IMM8);
+  EXPECT_FALSE(operation.operand2.isDereferenced());
+}
+
+TEST(CpuOpcode, CpuOpcode_CP_A_IMM8) {
+  auto operation = Opcode::decode(0xFE, false);
+
+  EXPECT_EQ(operation.op, CPUOperationTypeEnum::BLOCK_3_CP_A_IMM8);
+  EXPECT_EQ(operation.operand1.getType(), CPUOperandTypeEnum::R8);
+  EXPECT_EQ(operation.operand1.getReg8(), CPURegister8Enum::A);
+
+  EXPECT_EQ(operation.operand2.getType(), CPUOperandTypeEnum::IMM8);
+  EXPECT_FALSE(operation.operand2.isDereferenced());
+}
+
 TEST(CpuOpcode, CpuOpcode_RET_COND) {
   auto operation = Opcode::decode(0xC6, false);
 
