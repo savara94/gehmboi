@@ -7,6 +7,8 @@ using namespace gehmboi::emulator;
 CPUOperationOperand::CPUOperationOperand() {
   m_Type = CPUOperandTypeEnum::NO_OPERAND;
   m_IsDereferenced = false;
+  m_IsIncrement = false;
+  m_IsDecrement = false;
 }
 
 CPUOperationOperand CPUOperationOperand::createNoOperand() {
@@ -31,12 +33,24 @@ CPUOperationOperand::createReg8Operand(CPURegister8Enum reg8,
 
 CPUOperationOperand
 CPUOperationOperand::createReg16Operand(CPURegister16Enum reg16,
-                                        bool isDereferenced) {
+                                        bool isDereferenced, bool isIncrement,
+                                        bool isDecrement) {
   auto op = CPUOperationOperand();
 
   op.m_Type = CPUOperandTypeEnum::R16;
   op.m_Value.reg16 = reg16;
   op.m_IsDereferenced = isDereferenced;
+  op.m_IsIncrement = isIncrement;
+
+  return op;
+}
+
+CPUOperationOperand
+CPUOperationOperand::createConditionOperand(CPUConditionEnum condition) {
+  auto op = CPUOperationOperand();
+
+  op.m_Type = CPUOperandTypeEnum::CONDITION;
+  op.m_Value.condition = condition;
 
   return op;
 }
@@ -85,6 +99,15 @@ CPURegister16Enum CPUOperationOperand::getReg16() const {
   return m_Value.reg16;
 }
 
+CPUConditionEnum CPUOperationOperand::getCondition() const {
+  if (m_Type != CPUOperandTypeEnum::CONDITION) {
+    throw std::runtime_error(
+        "CPUOperationOperand: Operand is not of m_Type CONDITION");
+  }
+
+  return m_Value.condition;
+}
+
 uint8_t CPUOperationOperand::getImm8() const {
   if (m_Type != CPUOperandTypeEnum::IMM8) {
     throw std::runtime_error(
@@ -102,3 +125,7 @@ uint16_t CPUOperationOperand::getImm16() const {
 
   return m_Value.imm16;
 }
+
+bool CPUOperationOperand::isIncrement() const noexcept { return m_IsIncrement; }
+
+bool CPUOperationOperand::isDecrement() const noexcept { return m_IsDecrement; }

@@ -11,7 +11,7 @@ enum class CPUOperationTypeEnum {
   BLOCK_0_LD_R16_IMM16,
   BLOCK_0_LD_R16MEM_A,
   BLOCK_0_LD_A_R16MEM,
-  BLOCK_0_IMM16MEM_SP,
+  BLOCK_0_LD_IMM16MEM_SP,
   BLOCK_0_INC_R16,
   BLOCK_0_DEC_R16,
   BLOCK_0_ADD_HL_R16,
@@ -78,8 +78,16 @@ enum class CPUOperandTypeEnum {
   NO_OPERAND,
   R8,
   R16,
+  CONDITION,
   IMM8,
   IMM16,
+};
+
+enum class CPUConditionEnum {
+  NZ,
+  Z,
+  NC,
+  C,
 };
 
 struct CPUOperationOperand {
@@ -89,23 +97,32 @@ public:
   static CPUOperationOperand createReg8Operand(CPURegister8Enum reg8,
                                                bool isDereferenced);
   static CPUOperationOperand createReg16Operand(CPURegister16Enum reg16,
-                                                bool isDereferenced);
+                                                bool isDereferenced,
+                                                bool isIncrement,
+                                                bool isDecrement);
+  static CPUOperationOperand createConditionOperand(CPUConditionEnum condition);
   static CPUOperationOperand createImm8Operand(uint8_t imm8);
   static CPUOperationOperand createImm16Operand(uint16_t imm16);
 
   CPUOperandTypeEnum getType() const noexcept;
   bool isDereferenced() const noexcept;
+  bool isIncrement() const noexcept;
+  bool isDecrement() const noexcept;
   CPURegister8Enum getReg8() const;
   CPURegister16Enum getReg16() const;
+  CPUConditionEnum getCondition() const;
   uint8_t getImm8() const;
   uint16_t getImm16() const;
 
 private:
   CPUOperandTypeEnum m_Type;
   bool m_IsDereferenced;
+  bool m_IsIncrement;
+  bool m_IsDecrement;
   union {
     CPURegister8Enum reg8;
     CPURegister16Enum reg16;
+    CPUConditionEnum condition;
     uint8_t imm8;
     uint16_t imm16;
   } m_Value;
