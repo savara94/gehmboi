@@ -45,6 +45,15 @@ CPUOperationOperand::createReg16Operand(CPURegister16Enum reg16,
   return op;
 }
 
+CPUOperationOperand CPUOperationOperand::createLiteralOperand(uint8_t value) {
+  auto op = CPUOperationOperand();
+
+  op.m_Type = CPUOperandTypeEnum::LITERAL;
+  op.m_Value.literal = value;
+
+  return op;
+}
+
 CPUOperationOperand
 CPUOperationOperand::createConditionOperand(CPUConditionEnum condition) {
   auto op = CPUOperationOperand();
@@ -106,6 +115,15 @@ CPUConditionEnum CPUOperationOperand::getCondition() const {
   }
 
   return m_Value.condition;
+}
+
+uint8_t CPUOperationOperand::getLiteral() const {
+  if (m_Type != CPUOperandTypeEnum::LITERAL) {
+    throw std::runtime_error(
+        "CPUOperationOperand: Operand is not of m_Type LITERAL");
+  }
+
+  return m_Value.literal;
 }
 
 uint8_t CPUOperationOperand::getImm8() const {
