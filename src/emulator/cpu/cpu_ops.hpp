@@ -79,7 +79,7 @@ enum class CPUOperationTypeEnum {
   BLOCK_3_CB_PREFIX_RR_R8,
   BLOCK_3_CB_PREFIX_SLA_R8,
   BLOCK_3_CB_PREFIX_SRA_R8,
-  BLOCK_3_CB_PREFIX_SLL_R8,
+  BLOCK_3_CB_PREFIX_SWAP_R8,
   BLOCK_3_CB_PREFIX_SRL_R8,
   BLOCK_3_CB_PREFIX_BIT_B3_R8,
   BLOCK_3_CB_PREFIX_RES_B3_R8,
@@ -114,8 +114,8 @@ public:
                                                 bool isIncrement,
                                                 bool isDecrement);
   static CPUOperationOperand createConditionOperand(CPUConditionEnum condition);
-  static CPUOperationOperand createImm8Operand(uint8_t imm8);
-  static CPUOperationOperand createImm16Operand(uint16_t imm16);
+  static CPUOperationOperand createImm8Operand();
+  static CPUOperationOperand createImm16Operand();
   static CPUOperationOperand createLiteralOperand(uint8_t value);
 
   CPUOperandTypeEnum getType() const noexcept;
@@ -126,8 +126,6 @@ public:
   CPURegister16Enum getReg16() const;
   uint8_t getLiteral() const;
   CPUConditionEnum getCondition() const;
-  uint8_t getImm8() const;
-  uint16_t getImm16() const;
 
 private:
   CPUOperandTypeEnum m_Type;
@@ -139,8 +137,6 @@ private:
     CPURegister16Enum reg16;
     CPUConditionEnum condition;
     uint8_t literal;
-    uint8_t imm8;
-    uint16_t imm16;
   } m_Value;
 };
 

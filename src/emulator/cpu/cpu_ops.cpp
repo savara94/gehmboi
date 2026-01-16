@@ -64,20 +64,18 @@ CPUOperationOperand::createConditionOperand(CPUConditionEnum condition) {
   return op;
 }
 
-CPUOperationOperand CPUOperationOperand::createImm8Operand(uint8_t imm8) {
+CPUOperationOperand CPUOperationOperand::createImm8Operand() {
   auto op = CPUOperationOperand();
 
   op.m_Type = CPUOperandTypeEnum::IMM8;
-  op.m_Value.imm8 = imm8;
 
   return op;
 }
 
-CPUOperationOperand CPUOperationOperand::createImm16Operand(uint16_t imm16) {
+CPUOperationOperand CPUOperationOperand::createImm16Operand() {
   auto op = CPUOperationOperand();
 
   op.m_Type = CPUOperandTypeEnum::IMM16;
-  op.m_Value.imm16 = imm16;
 
   return op;
 }
@@ -124,24 +122,6 @@ uint8_t CPUOperationOperand::getLiteral() const {
   }
 
   return m_Value.literal;
-}
-
-uint8_t CPUOperationOperand::getImm8() const {
-  if (m_Type != CPUOperandTypeEnum::IMM8) {
-    throw std::runtime_error(
-        "CPUOperationOperand: Operand is not of m_Type IMM8");
-  }
-
-  return m_Value.imm8;
-}
-
-uint16_t CPUOperationOperand::getImm16() const {
-  if (m_Type != CPUOperandTypeEnum::IMM16) {
-    throw std::runtime_error(
-        "CPUOperationOperand: Operand is not of m_Type IMM16");
-  }
-
-  return m_Value.imm16;
 }
 
 bool CPUOperationOperand::isIncrement() const noexcept { return m_IsIncrement; }
