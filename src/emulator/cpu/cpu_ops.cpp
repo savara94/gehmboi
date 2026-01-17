@@ -41,6 +41,7 @@ CPUOperationOperand::createReg16Operand(CPURegister16Enum reg16,
   op.m_Value.reg16 = reg16;
   op.m_IsDereferenced = isDereferenced;
   op.m_IsIncrement = isIncrement;
+  op.m_IsDecrement = isDecrement;
 
   return op;
 }
@@ -64,18 +65,20 @@ CPUOperationOperand::createConditionOperand(CPUConditionEnum condition) {
   return op;
 }
 
-CPUOperationOperand CPUOperationOperand::createImm8Operand() {
+CPUOperationOperand CPUOperationOperand::createImm8Operand(bool isDereferenced) {
   auto op = CPUOperationOperand();
 
   op.m_Type = CPUOperandTypeEnum::IMM8;
+  op.m_IsDereferenced = isDereferenced;
 
   return op;
 }
 
-CPUOperationOperand CPUOperationOperand::createImm16Operand() {
+CPUOperationOperand CPUOperationOperand::createImm16Operand(bool isDereferenced) {
   auto op = CPUOperationOperand();
 
   op.m_Type = CPUOperandTypeEnum::IMM16;
+  op.m_IsDereferenced = isDereferenced;
 
   return op;
 }

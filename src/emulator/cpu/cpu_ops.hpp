@@ -114,8 +114,8 @@ public:
                                                 bool isIncrement,
                                                 bool isDecrement);
   static CPUOperationOperand createConditionOperand(CPUConditionEnum condition);
-  static CPUOperationOperand createImm8Operand();
-  static CPUOperationOperand createImm16Operand();
+  static CPUOperationOperand createImm8Operand(bool isDereferenced);
+  static CPUOperationOperand createImm16Operand(bool isDereferenced);
   static CPUOperationOperand createLiteralOperand(uint8_t value);
 
   CPUOperandTypeEnum getType() const noexcept;
@@ -145,4 +145,4 @@ struct CPUOperation {
   CPUOperationOperand operand1;
   CPUOperationOperand operand2;
 };
-};
+}; // namespace gehmboi::emulator

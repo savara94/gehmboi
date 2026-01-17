@@ -1,61 +1,35 @@
 #include "cpu_opcode.hpp"
+
+#include "cpu_opcode_static.hpp"
+#include "cpu_opcode_block_0.hpp"
+#include "cpu_opcode_block_1.hpp"
+
+#include <functional>
+#include <iomanip>
+
 #include <sstream>
 #include <stdexcept>
 
 using namespace gehmboi::emulator;
 
-static uint getOpcodeBlock(uint8_t opcode);
-static CPUOperation decodeBlock0(uint8_t opcode);
-static CPUOperation decodeBlock1(uint8_t opcode);
-static CPUOperation decodeBlock2(uint8_t opcode);
-static CPUOperation decodeBlock3(uint8_t opcode);
+static const uint8_t blockMask = 0xC0;
 
 CPUOperation Opcode::decode(uint8_t opcode, bool isCBPrefixActive) {
-  auto decodedOperation = CPUOperation();
-
-  decodedOperation.op = CPUOperationTypeEnum::UNDEFINED;
-  decodedOperation.operand1 = CPUOperationOperand::createNoOperand();
-  decodedOperation.operand2 = CPUOperationOperand::createNoOperand();
-
-  if (isCBPrefixActive) {
-    decodedOperation = decodeBlock3(opcode);
-    return decodedOperation;
+  if (staticOpcodeMapNoPrefix.find(opcode) != staticOpcodeMapNoPrefix.end()) {
+    return staticOpcodeMapNoPrefix.at(opcode);
   }
 
-  auto block = getOpcodeBlock(opcode);
-  switch (block) {
-  case 0:
-    decodedOperation = decodeBlock0(opcode);
-    break;
-  case 1:
-    decodedOperation = decodeBlock1(opcode);
-    break;
-  case 2:
-    decodedOperation = decodeBlock2(opcode);
-    break;
-  case 3:
-    decodedOperation = decodeBlock3(opcode);
-    break;
-
-  default:
-    // TODO
-    // Throw error.
-    // Make a class that can easily interpolate strings.
-    std::stringstream stream;
-    stream << "Opcode " << std::hex << opcode << "can't be decoded!";
-
-    throw std::runtime_error(stream.str());
+  auto block = (opcode & blockMask) >> 6;
+  if (block == 0 && block0Map.find(opcode) != block0Map.end()) {
+    return block0Map.at(opcode);
   }
 
-  return decodedOperation;
+  if (block == 1 && block1Map.find(opcode) != block1Map.end()) {
+    return block1Map.at(opcode);
+  }
+
+  std::stringstream stream;
+  stream << "Opcode 0x" << std::hex << std::setw(2) << std::setfill('0') << int(opcode) << " can't be decoded!";
+
+  throw std::runtime_error(stream.str());
 }
-
-uint getOpcodeBlock(uint8_t opcode) { return 0; }
-
-CPUOperation decodeBlock0(uint8_t opcode) { return CPUOperation(); }
-
-CPUOperation decodeBlock1(uint8_t opcode) { return CPUOperation(); }
-
-CPUOperation decodeBlock2(uint8_t opcode) { return CPUOperation(); }
-
-CPUOperation decodeBlock3(uint8_t opcode) { return CPUOperation(); }

@@ -549,10 +549,16 @@ TEST(CpuOpcode, CpuOpcode_LD_R8_R8) {
   auto prefix = 0x01;
   auto operation_type = CPUOperationTypeEnum::BLOCK_1_LD_R8_R8;
 
-  // Table: opcode src, destination -> operand1, operand2
+  // Table: opcode dest, src -> operand1, operand2
   auto table = std::vector<std::tuple<std::string, uint8_t, uint8_t,
                                       CPURegister8Enum, CPURegister8Enum>>({
-      {"B <- C", 0x00, 0x01, CPURegister8Enum::B, CPURegister8Enum::C},
+      {
+          "B <- C",
+          0x00,
+          0x01,
+          CPURegister8Enum::B,
+          CPURegister8Enum::C
+      },
       {
           "D <- E",
           0x02,
@@ -568,7 +574,7 @@ TEST(CpuOpcode, CpuOpcode_LD_R8_R8) {
           CPURegister8Enum::L,
       },
       {
-          "B <- A",
+          "A <- B",
           0x07,
           0x00,
           CPURegister8Enum::A,
@@ -576,10 +582,10 @@ TEST(CpuOpcode, CpuOpcode_LD_R8_R8) {
       },
   });
 
-  for (auto &[subtest, src, dest, op1, op2] : table) {
+  for (auto &[subtest, dest, src, op1, op2] : table) {
     uint8_t opcode = (prefix << 6) | (dest << 3) | src;
     std::stringstream ss;
-    ss << "Subtest: " << subtest << " opcode: " << std::hex << opcode
+    ss << "Subtest: " << subtest << " opcode: 0x" << std::hex << int(opcode)
        << std::dec;
     auto subtest_msg = ss.str();
 
@@ -603,41 +609,24 @@ TEST(CpuOpcode, CpuOpcode_LD_R8_R8) {
   auto subtest = "[HL] <- A";
   auto opcode = (prefix << 6) | (0x06 << 3) | 0x07;
   auto operation = Opcode::decode(opcode, false);
-
+  
   EXPECT_EQ(operation.op, operation_type) << opcode;
 
-  EXPECT_EQ(operation.operand1.getType(), CPUOperandTypeEnum::R8);
-  EXPECT_EQ(operation.operand1.getReg8(), CPURegister8Enum::A);
-  EXPECT_FALSE(operation.operand1.isDereferenced());
-
-  EXPECT_EQ(operation.operand2.getType(), CPUOperandTypeEnum::R16);
-  EXPECT_EQ(operation.operand2.getReg16(), CPURegister16Enum::HL);
-  EXPECT_TRUE(operation.operand2.isDereferenced());
+  EXPECT_EQ(operation.operand1.getType(), CPUOperandTypeEnum::R16);
+  EXPECT_EQ(operation.operand1.getReg16(), CPURegister16Enum::HL);
+  EXPECT_TRUE(operation.operand1.isDereferenced());
+  
+  EXPECT_EQ(operation.operand2.getType(), CPUOperandTypeEnum::R8);
+  EXPECT_EQ(operation.operand2.getReg8(), CPURegister8Enum::A);
+  EXPECT_FALSE(operation.operand2.isDereferenced());
 }
 
 TEST(CpuOpcode, CpuOpcode_LD_HALT) {
-  auto prefix = 0x01;
+  auto operation = Opcode::decode(0x76, false);
 
-  std::vector<std::tuple<std::string, uint8_t>> halt_opcodes = {
-      {"B <- B", prefix << 6 | 0x00 << 3 | 0x00},
-      {"C <- C", prefix << 6 | 0x01 << 3 | 0x01},
-      {"D <- D", prefix << 6 | 0x02 << 3 | 0x02},
-      {"E <- E", prefix << 6 | 0x03 << 3 | 0x03},
-      {"H <- H", prefix << 6 | 0x04 << 3 | 0x04},
-      {"L <- L", prefix << 6 | 0x05 << 3 | 0x05},
-      {"[HL] <- [HL]", prefix << 6 | 0x06 << 3 | 0x06},
-      {"A <- A", prefix << 6 | 0x07 << 3 | 0x07},
-  };
-
-  for (auto &[subtest, opcode] : halt_opcodes) {
-    auto operation = Opcode::decode(opcode, false);
-
-    EXPECT_EQ(operation.op, CPUOperationTypeEnum::BLOCK_1_LD_HALT) << subtest;
-    EXPECT_EQ(operation.operand1.getType(), CPUOperandTypeEnum::NO_OPERAND)
-        << subtest;
-    EXPECT_EQ(operation.operand2.getType(), CPUOperandTypeEnum::NO_OPERAND)
-        << subtest;
-  }
+  EXPECT_EQ(operation.op, CPUOperationTypeEnum::BLOCK_1_LD_HALT);
+  EXPECT_EQ(operation.operand1.getType(), CPUOperandTypeEnum::NO_OPERAND);
+  EXPECT_EQ(operation.operand2.getType(), CPUOperandTypeEnum::NO_OPERAND);
 }
 
 // Block 2
