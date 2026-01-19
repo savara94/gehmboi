@@ -3,1049 +3,1049 @@
 #include "cpu_ops.hpp"
 
 namespace gehmboi::emulator {
-static const std::unordered_map<uint8_t, DecodedOperation> cbPrefixOpcodeMap = {
+static const std::unordered_map<uint8_t, Opcode> cbPrefixOpcodeMap = {
     // BLOCK_3_CB_PREFIX_RLC_R8 (0x00-0x07)
-    {0x00, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RLC_R8,
+    {0x00, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RLC_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x01, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RLC_R8,
+    {0x01, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RLC_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x02, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RLC_R8,
+    {0x02, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RLC_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x03, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RLC_R8,
+    {0x03, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RLC_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x04, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RLC_R8,
+    {0x04, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RLC_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x05, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RLC_R8,
+    {0x05, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RLC_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x06, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RLC_R8,
+    {0x06, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RLC_R8,
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x07, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RLC_R8,
+    {0x07, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RLC_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false),
                             CPUOperationOperand::createNoOperand()}},
 
     // BLOCK_3_CB_PREFIX_RRC_R8 (0x08-0x0F)
-    {0x08, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RRC_R8,
+    {0x08, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RRC_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x09, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RRC_R8,
+    {0x09, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RRC_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x0A, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RRC_R8,
+    {0x0A, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RRC_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x0B, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RRC_R8,
+    {0x0B, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RRC_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x0C, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RRC_R8,
+    {0x0C, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RRC_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x0D, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RRC_R8,
+    {0x0D, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RRC_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x0E, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RRC_R8,
+    {0x0E, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RRC_R8,
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x0F, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RRC_R8,
+    {0x0F, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RRC_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false),
                             CPUOperationOperand::createNoOperand()}},
 
     // BLOCK_3_CB_PREFIX_RL_R8 (0x10-0x17)
-    {0x10, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RL_R8,
+    {0x10, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RL_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x11, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RL_R8,
+    {0x11, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RL_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x12, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RL_R8,
+    {0x12, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RL_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x13, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RL_R8,
+    {0x13, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RL_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x14, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RL_R8,
+    {0x14, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RL_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x15, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RL_R8,
+    {0x15, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RL_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x16, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RL_R8,
+    {0x16, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RL_R8,
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x17, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RL_R8,
+    {0x17, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RL_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false),
                             CPUOperationOperand::createNoOperand()}},
 
     // BLOCK_3_CB_PREFIX_RR_R8 (0x18-0x1F)
-    {0x18, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RR_R8,
+    {0x18, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RR_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x19, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RR_R8,
+    {0x19, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RR_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x1A, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RR_R8,
+    {0x1A, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RR_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x1B, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RR_R8,
+    {0x1B, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RR_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x1C, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RR_R8,
+    {0x1C, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RR_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x1D, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RR_R8,
+    {0x1D, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RR_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x1E, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RR_R8,
+    {0x1E, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RR_R8,
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x1F, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RR_R8,
+    {0x1F, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RR_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false),
                             CPUOperationOperand::createNoOperand()}},
 
     // BLOCK_3_CB_PREFIX_SLA_R8 (0x20-0x27)
-    {0x20, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SLA_R8,
+    {0x20, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SLA_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x21, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SLA_R8,
+    {0x21, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SLA_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x22, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SLA_R8,
+    {0x22, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SLA_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x23, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SLA_R8,
+    {0x23, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SLA_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x24, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SLA_R8,
+    {0x24, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SLA_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x25, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SLA_R8,
+    {0x25, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SLA_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x26, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SLA_R8,
+    {0x26, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SLA_R8,
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x27, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SLA_R8,
+    {0x27, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SLA_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false),
                             CPUOperationOperand::createNoOperand()}},
 
     // BLOCK_3_CB_PREFIX_SRA_R8 (0x28-0x2F)
-    {0x28, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRA_R8,
+    {0x28, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRA_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x29, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRA_R8,
+    {0x29, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRA_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x2A, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRA_R8,
+    {0x2A, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRA_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x2B, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRA_R8,
+    {0x2B, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRA_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x2C, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRA_R8,
+    {0x2C, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRA_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x2D, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRA_R8,
+    {0x2D, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRA_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x2E, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRA_R8,
+    {0x2E, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRA_R8,
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x2F, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRA_R8,
+    {0x2F, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRA_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false),
                             CPUOperationOperand::createNoOperand()}},
 
     // BLOCK_3_CB_PREFIX_SWAP_R8 (0x30-0x37)
-    {0x30, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SWAP_R8,
+    {0x30, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SWAP_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x31, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SWAP_R8,
+    {0x31, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SWAP_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x32, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SWAP_R8,
+    {0x32, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SWAP_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x33, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SWAP_R8,
+    {0x33, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SWAP_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x34, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SWAP_R8,
+    {0x34, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SWAP_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x35, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SWAP_R8,
+    {0x35, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SWAP_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x36, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SWAP_R8,
+    {0x36, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SWAP_R8,
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x37, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SWAP_R8,
+    {0x37, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SWAP_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false),
                             CPUOperationOperand::createNoOperand()}},
 
     // BLOCK_3_CB_PREFIX_SRL_R8 (0x38-0x3F)
-    {0x38, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRL_R8,
+    {0x38, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRL_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x39, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRL_R8,
+    {0x39, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRL_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x3A, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRL_R8,
+    {0x3A, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRL_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x3B, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRL_R8,
+    {0x3B, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRL_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x3C, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRL_R8,
+    {0x3C, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRL_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x3D, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRL_R8,
+    {0x3D, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRL_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x3E, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRL_R8,
+    {0x3E, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRL_R8,
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0x3F, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRL_R8,
+    {0x3F, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRL_R8,
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false),
                             CPUOperationOperand::createNoOperand()}},
 
     // BLOCK_3_CB_PREFIX_BIT_B3_R8 (0x40-0x7F)
-    {0x40, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x40, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0x41, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x41, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0x42, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x42, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0x43, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x43, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0x44, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x44, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0x45, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x45, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0x46, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x46, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0x47, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x47, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
-    {0x48, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x48, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0x49, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x49, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0x4A, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x4A, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0x4B, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x4B, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0x4C, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x4C, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0x4D, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x4D, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0x4E, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x4E, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0x4F, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x4F, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
-    {0x50, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x50, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0x51, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x51, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0x52, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x52, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0x53, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x53, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0x54, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x54, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0x55, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x55, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0x56, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x56, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0x57, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x57, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
-    {0x58, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x58, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0x59, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x59, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0x5A, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x5A, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0x5B, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x5B, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0x5C, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x5C, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0x5D, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x5D, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0x5E, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x5E, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0x5F, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x5F, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
-    {0x60, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x60, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0x61, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x61, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0x62, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x62, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0x63, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x63, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0x64, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x64, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0x65, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x65, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0x66, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x66, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0x67, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x67, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
-    {0x68, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x68, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0x69, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x69, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0x6A, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x6A, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0x6B, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x6B, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0x6C, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x6C, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0x6D, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x6D, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0x6E, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x6E, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0x6F, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x6F, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
-    {0x70, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x70, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0x71, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x71, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0x72, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x72, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0x73, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x73, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0x74, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x74, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0x75, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x75, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0x76, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x76, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0x77, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x77, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
-    {0x78, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x78, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0x79, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x79, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0x7A, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x7A, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0x7B, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x7B, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0x7C, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x7C, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0x7D, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x7D, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0x7E, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x7E, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0x7F, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
+    {0x7F, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
 
     // BLOCK_3_CB_PREFIX_RES_B3_R8 (0x80-0xBF)
-    {0x80, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x80, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0x81, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x81, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0x82, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x82, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0x83, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x83, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0x84, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x84, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0x85, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x85, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0x86, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x86, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0x87, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x87, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
-    {0x88, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x88, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0x89, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x89, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0x8A, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x8A, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0x8B, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x8B, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0x8C, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x8C, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0x8D, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x8D, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0x8E, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x8E, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0x8F, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x8F, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
-    {0x90, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x90, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0x91, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x91, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0x92, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x92, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0x93, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x93, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0x94, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x94, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0x95, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x95, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0x96, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x96, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0x97, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x97, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
-    {0x98, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x98, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0x99, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x99, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0x9A, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x9A, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0x9B, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x9B, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0x9C, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x9C, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0x9D, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x9D, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0x9E, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x9E, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0x9F, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0x9F, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
-    {0xA0, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xA0, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0xA1, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xA1, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0xA2, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xA2, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0xA3, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xA3, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0xA4, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xA4, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0xA5, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xA5, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0xA6, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xA6, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0xA7, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xA7, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
-    {0xA8, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xA8, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0xA9, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xA9, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0xAA, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xAA, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0xAB, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xAB, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0xAC, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xAC, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0xAD, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xAD, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0xAE, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xAE, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0xAF, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xAF, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
-    {0xB0, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xB0, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0xB1, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xB1, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0xB2, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xB2, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0xB3, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xB3, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0xB4, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xB4, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0xB5, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xB5, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0xB6, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xB6, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0xB7, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xB7, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
-    {0xB8, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xB8, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0xB9, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xB9, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0xBA, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xBA, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0xBB, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xBB, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0xBC, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xBC, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0xBD, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xBD, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0xBE, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xBE, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0xBF, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
+    {0xBF, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
 
     // BLOCK_3_CB_PREFIX_SET_B3_R8 (0xC0-0xFF)
-    {0xC0, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xC0, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0xC1, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xC1, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0xC2, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xC2, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0xC3, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xC3, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0xC4, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xC4, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0xC5, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xC5, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0xC6, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xC6, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0xC7, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xC7, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(0),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
-    {0xC8, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xC8, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0xC9, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xC9, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0xCA, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xCA, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0xCB, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xCB, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0xCC, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xCC, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0xCD, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xCD, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0xCE, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xCE, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0xCF, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xCF, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(1),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
-    {0xD0, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xD0, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0xD1, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xD1, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0xD2, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xD2, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0xD3, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xD3, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0xD4, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xD4, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0xD5, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xD5, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0xD6, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xD6, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0xD7, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xD7, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(2),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
-    {0xD8, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xD8, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0xD9, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xD9, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0xDA, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xDA, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0xDB, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xDB, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0xDC, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xDC, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0xDD, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xDD, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0xDE, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xDE, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0xDF, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xDF, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(3),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
-    {0xE0, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xE0, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0xE1, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xE1, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0xE2, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xE2, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0xE3, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xE3, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0xE4, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xE4, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0xE5, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xE5, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0xE6, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xE6, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0xE7, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xE7, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(4),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
-    {0xE8, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xE8, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0xE9, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xE9, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0xEA, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xEA, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0xEB, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xEB, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0xEC, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xEC, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0xED, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xED, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0xEE, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xEE, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0xEF, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xEF, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(5),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
-    {0xF0, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xF0, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0xF1, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xF1, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0xF2, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xF2, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0xF3, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xF3, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0xF4, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xF4, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0xF5, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xF5, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0xF6, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xF6, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0xF7, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xF7, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(6),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},
-    {0xF8, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xF8, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::B, false)}},
-    {0xF9, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xF9, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::C, false)}},
-    {0xFA, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xFA, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::D, false)}},
-    {0xFB, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xFB, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::E, false)}},
-    {0xFC, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xFC, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::H, false)}},
-    {0xFD, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xFD, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::L, false)}},
-    {0xFE, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xFE, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, true, false, false)}},
-    {0xFF, DecodedOperation{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
+    {0xFF, Opcode{CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8,
                             CPUOperationOperand::createLiteralOperand(7),
                             CPUOperationOperand::createReg8Operand(
                                 CPURegister8Enum::A, false)}},

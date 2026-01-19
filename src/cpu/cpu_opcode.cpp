@@ -16,8 +16,29 @@
 using namespace gehmboi::emulator;
 
 static const uint8_t blockMask = 0xC0;
+static const uint8_t blockShift = 6;
 
-DecodedOperation Opcode::decode(uint8_t opcode, bool isCBPrefixActive) {
+Opcode::Opcode(
+  CPUOperationTypeEnum type,
+  const CPUOperationOperand& op1,
+  const CPUOperationOperand& op2  
+) : m_Type(type), m_Op1(op1), m_Op2(op2) {
+
+}
+
+CPUOperationTypeEnum Opcode::getType() const {
+  return m_Type;
+}
+
+CPUOperationOperand Opcode::getOperand1() const {
+  return m_Op1;
+}
+
+CPUOperationOperand Opcode::getOperand2() const {
+  return m_Op2;
+}
+
+Opcode Opcode::decode(uint8_t opcode, bool isCBPrefixActive) {
   if (isCBPrefixActive) {
     return cbPrefixOpcodeMap.at(opcode);
   }
@@ -26,7 +47,7 @@ DecodedOperation Opcode::decode(uint8_t opcode, bool isCBPrefixActive) {
     return staticOpcodeMapNoPrefix.at(opcode);
   }
 
-  auto block = (opcode & blockMask) >> 6;
+  auto block = (opcode & blockMask) >> blockShift;
   if (block == 0 && block0Map.find(opcode) != block0Map.end()) {
     return block0Map.at(opcode);
   }

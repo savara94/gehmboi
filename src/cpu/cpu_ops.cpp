@@ -4,11 +4,12 @@
 
 using namespace gehmboi::emulator;
 
-CPUOperationOperand::CPUOperationOperand() {
-  m_Type = CPUOperandTypeEnum::NO_OPERAND;
-  m_IsDereferenced = false;
-  m_IsIncrement = false;
-  m_IsDecrement = false;
+CPUOperationOperand::CPUOperationOperand() :
+ m_Type(CPUOperandTypeEnum::NO_OPERAND),
+ m_IsDereferenced(false),
+ m_IsIncrement(false),
+ m_IsDecrement(false),
+ m_Info() {
 }
 
 CPUOperationOperand CPUOperationOperand::createNoOperand() {
@@ -25,7 +26,7 @@ CPUOperationOperand::createReg8Operand(CPURegister8Enum reg8,
   auto op = CPUOperationOperand();
 
   op.m_Type = CPUOperandTypeEnum::R8;
-  op.m_Value.reg8 = reg8;
+  op.m_Info = reg8;
   op.m_IsDereferenced = isDereferenced;
 
   return op;
@@ -38,7 +39,7 @@ CPUOperationOperand::createReg16Operand(CPURegister16Enum reg16,
   auto op = CPUOperationOperand();
 
   op.m_Type = CPUOperandTypeEnum::R16;
-  op.m_Value.reg16 = reg16;
+  op.m_Info = reg16;
   op.m_IsDereferenced = isDereferenced;
   op.m_IsIncrement = isIncrement;
   op.m_IsDecrement = isDecrement;
@@ -50,7 +51,7 @@ CPUOperationOperand CPUOperationOperand::createLiteralOperand(uint8_t value) {
   auto op = CPUOperationOperand();
 
   op.m_Type = CPUOperandTypeEnum::LITERAL;
-  op.m_Value.literal = value;
+  op.m_Info = value;
 
   return op;
 }
@@ -60,7 +61,7 @@ CPUOperationOperand::createConditionOperand(CPUConditionEnum condition) {
   auto op = CPUOperationOperand();
 
   op.m_Type = CPUOperandTypeEnum::CONDITION;
-  op.m_Value.condition = condition;
+  op.m_Info = condition;
 
   return op;
 }
@@ -97,7 +98,7 @@ CPURegister8Enum CPUOperationOperand::getReg8() const {
         "CPUOperationOperand: Operand is not of m_Type R8");
   }
 
-  return m_Value.reg8;
+  return std::get<CPURegister8Enum>(m_Info);
 }
 
 CPURegister16Enum CPUOperationOperand::getReg16() const {
@@ -106,7 +107,7 @@ CPURegister16Enum CPUOperationOperand::getReg16() const {
         "CPUOperationOperand: Operand is not of m_Type R16");
   }
 
-  return m_Value.reg16;
+  return std::get<CPURegister16Enum>(m_Info);
 }
 
 CPUConditionEnum CPUOperationOperand::getCondition() const {
@@ -115,7 +116,7 @@ CPUConditionEnum CPUOperationOperand::getCondition() const {
         "CPUOperationOperand: Operand is not of m_Type CONDITION");
   }
 
-  return m_Value.condition;
+  return std::get<CPUConditionEnum>(m_Info);
 }
 
 uint8_t CPUOperationOperand::getLiteral() const {
@@ -124,7 +125,7 @@ uint8_t CPUOperationOperand::getLiteral() const {
         "CPUOperationOperand: Operand is not of m_Type LITERAL");
   }
 
-  return m_Value.literal;
+  return std::get<uint8_t>(m_Info);
 }
 
 bool CPUOperationOperand::isIncrement() const noexcept { return m_IsIncrement; }

@@ -3,31 +3,31 @@
 #include "cpu_ops.hpp"
 
 namespace gehmboi::emulator {
-static const std::unordered_map<uint8_t, DecodedOperation> block0Map = {
+static const std::unordered_map<uint8_t, Opcode> block0Map = {
     // BLOCK_0_LD_R16_IMM16
     {0x01,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_LD_R16_IMM16,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::BC, false,
                                                  false, false),
          CPUOperationOperand::createImm16Operand(false),
      }},
     {0x11,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_LD_R16_IMM16,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::DE, false,
                                                  false, false),
          CPUOperationOperand::createImm16Operand(false),
      }},
     {0x21,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_LD_R16_IMM16,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, false,
                                                  false, false),
          CPUOperationOperand::createImm16Operand(false),
      }},
     {0x31,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_LD_R16_IMM16,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::SP, false,
                                                  false, false),
@@ -35,28 +35,28 @@ static const std::unordered_map<uint8_t, DecodedOperation> block0Map = {
      }},
     // BLOCK_0_LD_R16MEM_A
     {0x02,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_LD_R16MEM_A,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::BC, true,
                                                  false, false),
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
      }},
     {0x12,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_LD_R16MEM_A,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::DE, true,
                                                  false, false),
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
      }},
     {0x22,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_LD_R16MEM_A,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
                                                  true, false),
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
      }},
     {0x32,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_LD_R16MEM_A,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
                                                  false, true),
@@ -64,28 +64,28 @@ static const std::unordered_map<uint8_t, DecodedOperation> block0Map = {
      }},
     // BLOCK_0_LD_A_R16MEM
     {0x0A,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_LD_A_R16MEM,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::BC, true,
                                                  false, false),
      }},
     {0x1A,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_LD_A_R16MEM,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::DE, true,
                                                  false, false),
      }},
     {0x2A,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_LD_A_R16MEM,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
                                                  true, false),
      }},
     {0x3A,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_LD_A_R16MEM,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
@@ -93,28 +93,28 @@ static const std::unordered_map<uint8_t, DecodedOperation> block0Map = {
      }},
     // BLOCK_0_INC_R16
     {0x03,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_INC_R16,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::BC, false,
                                                  false, false),
          CPUOperationOperand::createNoOperand(),
      }},
     {0x13,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_INC_R16,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::DE, false,
                                                  false, false),
          CPUOperationOperand::createNoOperand(),
      }},
     {0x23,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_INC_R16,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, false,
                                                  false, false),
          CPUOperationOperand::createNoOperand(),
      }},
     {0x33,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_INC_R16,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::SP, false,
                                                  false, false),
@@ -122,28 +122,28 @@ static const std::unordered_map<uint8_t, DecodedOperation> block0Map = {
      }},
     // BLOCK_0_DEC_R16
     {0x0B,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_DEC_R16,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::BC, false,
                                                  false, false),
          CPUOperationOperand::createNoOperand(),
      }},
     {0x1B,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_DEC_R16,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::DE, false,
                                                  false, false),
          CPUOperationOperand::createNoOperand(),
      }},
     {0x2B,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_DEC_R16,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, false,
                                                  false, false),
          CPUOperationOperand::createNoOperand(),
      }},
     {0x3B,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_DEC_R16,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::SP, false,
                                                  false, false),
@@ -151,7 +151,7 @@ static const std::unordered_map<uint8_t, DecodedOperation> block0Map = {
      }},
     // BLOCK_0_ADD_HL_R16
     {0x09,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_ADD_HL_R16,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL,
                                                  false, false, false),
@@ -159,7 +159,7 @@ static const std::unordered_map<uint8_t, DecodedOperation> block0Map = {
                                                  false, false, false),
      }},
     {0x19,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_ADD_HL_R16,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL,
                                                  false, false, false),
@@ -167,7 +167,7 @@ static const std::unordered_map<uint8_t, DecodedOperation> block0Map = {
                                                  false, false, false),
      }},
     {0x29,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_ADD_HL_R16,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL,
                                                  false, false, false),
@@ -175,7 +175,7 @@ static const std::unordered_map<uint8_t, DecodedOperation> block0Map = {
                                                  false, false, false),
      }},
     {0x39,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_ADD_HL_R16,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL,
                                                  false, false, false),
@@ -184,174 +184,174 @@ static const std::unordered_map<uint8_t, DecodedOperation> block0Map = {
      }},
     // BLOCK_0_INC_R8
     {0x04,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_INC_R8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::B, false),
          CPUOperationOperand::createNoOperand(),
      }},
     {0x0C,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_INC_R8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::C, false),
          CPUOperationOperand::createNoOperand(),
      }},
     {0x14,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_INC_R8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::D, false),
          CPUOperationOperand::createNoOperand(),
      }},
     {0x1C,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_INC_R8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::E, false),
          CPUOperationOperand::createNoOperand(),
      }},
     {0x24,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_INC_R8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::H, false),
          CPUOperationOperand::createNoOperand(),
      }},
     {0x2C,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_INC_R8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::L, false),
          CPUOperationOperand::createNoOperand(),
      }},
     {0x34,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_INC_R8,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
                                                  false, false),
          CPUOperationOperand::createNoOperand(),
      }},
     {0x3C,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_INC_R8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
          CPUOperationOperand::createNoOperand(),
      }},
     // BLOCK_0_DEC_R8
     {0x05,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_DEC_R8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::B, false),
          CPUOperationOperand::createNoOperand(),
      }},
     {0x0D,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_DEC_R8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::C, false),
          CPUOperationOperand::createNoOperand(),
      }},
     {0x15,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_DEC_R8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::D, false),
          CPUOperationOperand::createNoOperand(),
      }},
     {0x1D,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_DEC_R8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::E, false),
          CPUOperationOperand::createNoOperand(),
      }},
     {0x25,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_DEC_R8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::H, false),
          CPUOperationOperand::createNoOperand(),
      }},
     {0x2D,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_DEC_R8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::L, false),
          CPUOperationOperand::createNoOperand(),
      }},
     {0x35,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_DEC_R8,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
                                                  false, false),
          CPUOperationOperand::createNoOperand(),
      }},
     {0x3D,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_DEC_R8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
          CPUOperationOperand::createNoOperand(),
      }},
     // BLOCK_0_LD_R8_IMM8
     {0x06,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_LD_R8_IMM8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::B, false),
          CPUOperationOperand::createImm8Operand(false),
      }},
     {0x0E,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_LD_R8_IMM8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::C, false),
          CPUOperationOperand::createImm8Operand(false),
      }},
     {0x16,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_LD_R8_IMM8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::D, false),
          CPUOperationOperand::createImm8Operand(false),
      }},
     {0x1E,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_LD_R8_IMM8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::E, false),
          CPUOperationOperand::createImm8Operand(false),
      }},
     {0x26,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_LD_R8_IMM8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::H, false),
          CPUOperationOperand::createImm8Operand(false),
      }},
     {0x2E,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_LD_R8_IMM8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::L, false),
          CPUOperationOperand::createImm8Operand(false),
      }},
     {0x36,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_LD_R8_IMM8,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
                                                  false, false),
          CPUOperationOperand::createImm8Operand(false),
      }},
     {0x3E,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_LD_R8_IMM8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
          CPUOperationOperand::createImm8Operand(false),
      }},
     {0x20,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_JR_COND_IMM8,
          CPUOperationOperand::createConditionOperand(CPUConditionEnum::NZ),
          CPUOperationOperand::createImm8Operand(false),
      }},
     {0x28,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_JR_COND_IMM8,
          CPUOperationOperand::createConditionOperand(CPUConditionEnum::Z),
          CPUOperationOperand::createImm8Operand(false),
      }},
     {0x30,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_JR_COND_IMM8,
          CPUOperationOperand::createConditionOperand(CPUConditionEnum::NC),
          CPUOperationOperand::createImm8Operand(false),
      }},
     {0x38,
-     DecodedOperation{
+     Opcode{
          CPUOperationTypeEnum::BLOCK_0_JR_COND_IMM8,
          CPUOperationOperand::createConditionOperand(CPUConditionEnum::C),
          CPUOperationOperand::createImm8Operand(false),

@@ -2,6 +2,8 @@
 
 using namespace gehmboi::emulator;
 
+static const auto upperByteShift = 8;
+
 CPURegisters::CPURegisters() {
   m_regs16[CPURegister16Enum::AF] = 0;
   m_regs16[CPURegister16Enum::BC] = 0;
@@ -12,13 +14,13 @@ CPURegisters::CPURegisters() {
 
   reg8ToReg16Map = std::unordered_map<CPURegister8Enum,
                                       std::pair<CPURegister16Enum, uint8_t>>(
-      {{CPURegister8Enum::A, {CPURegister16Enum::AF, 8}},
+      {{CPURegister8Enum::A, {CPURegister16Enum::AF, upperByteShift}},
        {CPURegister8Enum::F, {CPURegister16Enum::AF, 0}},
-       {CPURegister8Enum::B, {CPURegister16Enum::BC, 8}},
+       {CPURegister8Enum::B, {CPURegister16Enum::BC, upperByteShift}},
        {CPURegister8Enum::C, {CPURegister16Enum::BC, 0}},
-       {CPURegister8Enum::D, {CPURegister16Enum::DE, 8}},
+       {CPURegister8Enum::D, {CPURegister16Enum::DE, upperByteShift}},
        {CPURegister8Enum::E, {CPURegister16Enum::DE, 0}},
-       {CPURegister8Enum::H, {CPURegister16Enum::HL, 8}},
+       {CPURegister8Enum::H, {CPURegister16Enum::HL, upperByteShift}},
        {CPURegister8Enum::L, {CPURegister16Enum::HL, 0}}});
 }
 

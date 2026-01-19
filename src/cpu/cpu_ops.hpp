@@ -2,6 +2,8 @@
 
 #include "cpu_registers.hpp"
 #include <cstdint>
+#include <variant>
+
 
 namespace gehmboi::emulator {
 enum class CPUOperationTypeEnum {
@@ -102,6 +104,12 @@ enum class CPUConditionEnum {
   C,
 };
 
+using OperandInfo = std::variant<
+    CPURegister8Enum,
+    CPURegister16Enum,
+    CPUConditionEnum,
+    uint8_t>;
+
 struct CPUOperationOperand {
 public:
   CPUOperationOperand();
@@ -131,11 +139,6 @@ private:
   bool m_IsDereferenced;
   bool m_IsIncrement;
   bool m_IsDecrement;
-  union {
-    CPURegister8Enum reg8;
-    CPURegister16Enum reg16;
-    CPUConditionEnum condition;
-    uint8_t literal;
-  } m_Value;
+  OperandInfo m_Info;
 };
 }; // namespace gehmboi::emulator
