@@ -550,58 +550,66 @@ TEST(CpuOpcode, CpuOpcode_LD_R8_R8) {
   auto operation_type = CPUOperationTypeEnum::BLOCK_1_LD_R8_R8;
 
   // Table: opcode dest, src -> operand1, operand2
-  auto table = std::vector<std::tuple<std::string, uint8_t, uint8_t,
-                                      CPURegister8Enum, CPURegister8Enum>>({
+  auto table = std::vector<std::tuple<std::string, uint8_t, CPURegister8Enum>>({
       {
-          "B <- C",
+          "B",
           0x00,
-          0x01,
           CPURegister8Enum::B,
-          CPURegister8Enum::C
       },
       {
-          "D <- E",
+          "C",
+          0x01,
+          CPURegister8Enum::C,
+      },
+      {
+          "D",
           0x02,
-          0x03,
           CPURegister8Enum::D,
+      },
+      {
+          "E",
+          0x03,
           CPURegister8Enum::E,
       },
       {
-          "H <- L",
+          "H",
           0x04,
-          0x05,
           CPURegister8Enum::H,
+      },
+      {
+          "L",
+          0x05,
           CPURegister8Enum::L,
       },
       {
-          "A <- B",
+          "A",
           0x07,
-          0x00,
           CPURegister8Enum::A,
-          CPURegister8Enum::B,
       },
   });
 
-  for (auto &[subtest, dest, src, op1, op2] : table) {
-    uint8_t opcode = (prefix << 6) | (dest << 3) | src;
-    std::stringstream ss;
-    ss << "Subtest: " << subtest << " opcode: 0x" << std::hex << int(opcode)
-       << std::dec;
-    auto subtest_msg = ss.str();
+  for (auto &[srcReg, srcByte, srcOp] : table) {
+    for (auto &[dstReg, dstByte, dstOp] : table) {
+      uint8_t opcode = (prefix << 6) | (dstByte << 3) | srcByte;
+      std::stringstream ss;
+      ss << "Subtest: " << dstReg << " <- " << srcReg << " opcode: 0x"
+         << std::hex << int(opcode) << std::dec;
+      auto subtest_msg = ss.str();
 
-    auto operation = Opcode::decode(opcode, false);
+      auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.op, operation_type) << subtest_msg;
+      EXPECT_EQ(operation.op, operation_type) << subtest_msg;
 
-    EXPECT_EQ(operation.operand1.getType(), CPUOperandTypeEnum::R8)
-        << subtest_msg;
-    EXPECT_EQ(operation.operand1.getReg8(), op1) << subtest_msg;
-    EXPECT_FALSE(operation.operand1.isDereferenced()) << subtest_msg;
+      EXPECT_EQ(operation.operand1.getType(), CPUOperandTypeEnum::R8)
+          << subtest_msg;
+      EXPECT_EQ(operation.operand1.getReg8(), dstOp) << subtest_msg;
+      EXPECT_FALSE(operation.operand1.isDereferenced()) << subtest_msg;
 
-    EXPECT_EQ(operation.operand2.getType(), CPUOperandTypeEnum::R8)
-        << subtest_msg;
-    EXPECT_EQ(operation.operand2.getReg8(), op2) << subtest_msg;
-    EXPECT_FALSE(operation.operand2.isDereferenced()) << subtest_msg;
+      EXPECT_EQ(operation.operand2.getType(), CPUOperandTypeEnum::R8)
+          << subtest_msg;
+      EXPECT_EQ(operation.operand2.getReg8(), srcOp) << subtest_msg;
+      EXPECT_FALSE(operation.operand2.isDereferenced()) << subtest_msg;
+    }
   }
 
   // Exception mapping for 0x06 [HL]
@@ -1357,7 +1365,7 @@ TEST(CpuOpcode, CpuOpcode_RETI) {
   auto operation = Opcode::decode(0xD9, false);
 
   EXPECT_EQ(operation.op, CPUOperationTypeEnum::BLOCK_3_RETI);
-  EXPECT_EQ(operation.operand1.getType(), CPUOperandTypeEnum::IMM8);
+  EXPECT_EQ(operation.operand1.getType(), CPUOperandTypeEnum::NO_OPERAND);
   EXPECT_EQ(operation.operand2.getType(), CPUOperandTypeEnum::NO_OPERAND);
 }
 
@@ -1417,7 +1425,10 @@ TEST(CpuOpcode, CpuOpcode_JP_HL) {
   auto operation = Opcode::decode(0xE9, false);
 
   EXPECT_EQ(operation.op, CPUOperationTypeEnum::BLOCK_3_JP_HL);
-  EXPECT_EQ(operation.operand1.getType(), CPUOperandTypeEnum::NO_OPERAND);
+
+  EXPECT_EQ(operation.operand1.getType(), CPUOperandTypeEnum::R16);
+  EXPECT_EQ(operation.operand1.getReg16(), CPURegister16Enum::HL);
+
   EXPECT_EQ(operation.operand2.getType(), CPUOperandTypeEnum::NO_OPERAND);
 }
 
@@ -1567,7 +1578,7 @@ TEST(CpuOpcode, CpuOpcode_POP_R16_STK) {
       });
 
   for (auto &[subtest, dest, reg16] : table) {
-    uint8_t opcode = prefix | dest << 3 | suffix;
+    uint8_t opcode = prefix | dest << 4 | suffix;
 
     auto operation = Opcode::decode(opcode, false);
 
@@ -1612,7 +1623,7 @@ TEST(CpuOpcode, CpuOpcode_PUSH_R16_STK) {
       });
 
   for (auto &[subtest, dest, reg16] : table) {
-    uint8_t opcode = prefix | dest << 3 | suffix;
+    uint8_t opcode = prefix | dest << 4 | suffix;
 
     auto operation = Opcode::decode(opcode, false);
 

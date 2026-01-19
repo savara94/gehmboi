@@ -5,7 +5,6 @@
 
 namespace gehmboi::emulator {
 enum class CPUOperationTypeEnum {
-  UNDEFINED = -1,
   // Block 0
   BLOCK_0_NOP,
   BLOCK_0_LD_R16_IMM16,
@@ -138,11 +137,5 @@ private:
     CPUConditionEnum condition;
     uint8_t literal;
   } m_Value;
-};
-
-struct CPUOperation {
-  CPUOperationTypeEnum op;
-  CPUOperationOperand operand1;
-  CPUOperationOperand operand2;
 };
 }; // namespace gehmboi::emulator
