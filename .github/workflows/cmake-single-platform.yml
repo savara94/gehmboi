@@ -24,7 +24,7 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Pull VCPKG
+    - name: Pull submodules
       run: git submodule update --init --recursive && git submodule update --recursive --remote
 
     - name: Configure CMake
