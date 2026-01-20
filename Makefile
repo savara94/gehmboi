@@ -48,6 +48,7 @@ format-inline:
 test:
 	@printf "Running tests:\n"
 	@$(BUILD_DIR)/tests/tests
+	@$(BUILD_DIR)/tests/cpu_tests
 
 help:
 	@printf "Usage: make init [CMAKE=cmake] [CMAKE_MAKE_PROGRAM=ninja] [C_COMPILER=gcc] [CXX_COMPILER=g++] [PRESET=default]\n"

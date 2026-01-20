@@ -1,0 +1,417 @@
+#pragma once
+
+#include "cpu_ops.hpp"
+
+namespace gehmboi::emulator {
+static const std::unordered_map<uint8_t, Opcode> block1Map = {
+    // BLOCK_1_LD_HALT
+    {0x76,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_HALT,
+         CPUOperationOperand::createNoOperand(),
+         CPUOperationOperand::createNoOperand(),
+     }},
+    // BLOCK_1_LD_R8_R8
+    // B register destination
+    {0x40,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::B, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::B, false),
+     }},
+    {0x41,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::B, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::C, false),
+     }},
+    {0x42,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::B, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::D, false),
+     }},
+    {0x43,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::B, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::E, false),
+     }},
+    {0x44,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::B, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::H, false),
+     }},
+    {0x45,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::B, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::L, false),
+     }},
+    {0x46,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::B, false),
+         CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
+                                                 false, false),
+     }},
+    {0x47,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::B, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
+     }},
+    // C register destination
+    {0x48,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::C, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::B, false),
+     }},
+    {0x49,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::C, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::C, false),
+     }},
+    {0x4A,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::C, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::D, false),
+     }},
+    {0x4B,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::C, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::E, false),
+     }},
+    {0x4C,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::C, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::H, false),
+     }},
+    {0x4D,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::C, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::L, false),
+     }},
+    {0x4E,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::C, false),
+         CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
+                                                 false, false),
+     }},
+    {0x4F,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::C, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
+     }},
+    // D register destination
+    {0x50,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::D, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::B, false),
+     }},
+    {0x51,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::D, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::C, false),
+     }},
+    {0x52,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::D, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::D, false),
+     }},
+    {0x53,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::D, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::E, false),
+     }},
+    {0x54,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::D, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::H, false),
+     }},
+    {0x55,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::D, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::L, false),
+     }},
+    {0x56,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::D, false),
+         CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
+                                                 false, false),
+     }},
+    {0x57,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::D, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
+     }},
+    // E register destination
+    {0x58,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::E, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::B, false),
+     }},
+    {0x59,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::E, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::C, false),
+     }},
+    {0x5A,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::E, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::D, false),
+     }},
+    {0x5B,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::E, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::E, false),
+     }},
+    {0x5C,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::E, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::H, false),
+     }},
+    {0x5D,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::E, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::L, false),
+     }},
+    {0x5E,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::E, false),
+         CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
+                                                 false, false),
+     }},
+    {0x5F,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::E, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
+     }},
+    // H register destination
+    {0x60,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::H, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::B, false),
+     }},
+    {0x61,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::H, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::C, false),
+     }},
+    {0x62,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::H, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::D, false),
+     }},
+    {0x63,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::H, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::E, false),
+     }},
+    {0x64,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::H, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::H, false),
+     }},
+    {0x65,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::H, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::L, false),
+     }},
+    {0x66,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::H, false),
+         CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
+                                                 false, false),
+     }},
+    {0x67,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::H, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
+     }},
+    // L register destination
+    {0x68,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::L, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::B, false),
+     }},
+    {0x69,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::L, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::C, false),
+     }},
+    {0x6A,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::L, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::D, false),
+     }},
+    {0x6B,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::L, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::E, false),
+     }},
+    {0x6C,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::L, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::H, false),
+     }},
+    {0x6D,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::L, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::L, false),
+     }},
+    {0x6E,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::L, false),
+         CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
+                                                 false, false),
+     }},
+    {0x6F,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::L, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
+     }},
+    // HL Memory destination
+    {0x70,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
+                                                 false, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::B, false),
+     }},
+    {0x71,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
+                                                 false, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::C, false),
+     }},
+    {0x72,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
+                                                 false, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::D, false),
+     }},
+    {0x73,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
+                                                 false, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::E, false),
+     }},
+    {0x74,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
+                                                 false, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::H, false),
+     }},
+    {0x75,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
+                                                 false, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::L, false),
+     }},
+    {0x77,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
+                                                 false, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
+     }},
+    // A register destination
+    {0x78,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::B, false),
+     }},
+    {0x79,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::C, false),
+     }},
+    {0x7A,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::D, false),
+     }},
+    {0x7B,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::E, false),
+     }},
+    {0x7C,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::H, false),
+     }},
+    {0x7D,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::L, false),
+     }},
+    {0x7E,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
+         CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
+                                                 false, false),
+     }},
+    {0x7F,
+     Opcode{
+         CPUOperationTypeEnum::BLOCK_1_LD_R8_R8,
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
+         CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
+     }},
+
+};
+} // namespace gehmboi::emulator
