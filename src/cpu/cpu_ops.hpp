@@ -6,7 +6,20 @@
 
 
 namespace gehmboi::emulator {
-enum class CPUOperationTypeEnum {
+enum class CPUOperationTypeEnum
+{
+  UNDEFINED = -1,
+  TRANSFER,
+  ALU,
+  ROTATE_SHIFT,
+  BITWISE,
+  JUMP,
+  CALL,
+  RETURN,
+  SPECIFIC,
+};
+
+enum class CPUOperationIdEnum {
   // Block 0
   BLOCK_0_NOP,
   BLOCK_0_LD_R16_IMM16,

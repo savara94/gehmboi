@@ -9,7 +9,7 @@ using namespace gehmboi::emulator;
 TEST(CpuOpcode, CpuOpcode_NOP) {
   auto operation = Opcode::decode(0x00, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_NOP);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_NOP);
 
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::NO_OPERAND);
   EXPECT_EQ(operation.getOperand2().getType(), CPUOperandTypeEnum::NO_OPERAND);
@@ -29,7 +29,7 @@ TEST(CpuOpcode, CpuOpcode_LD_R16_IMM16) {
     auto opcode = prefix << 6 | dstcode << 4 | suffix;
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_LD_R16_IMM16)
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_LD_R16_IMM16)
         << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R16) << subtest;
@@ -59,7 +59,7 @@ TEST(CpuOpcode, CpuOpcode_LD_R16MEM_A) {
     auto opcode = prefix << 6 | dstcode << 4 | suffix;
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_LD_R16MEM_A)
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_LD_R16MEM_A)
         << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R16) << subtest;
@@ -91,7 +91,7 @@ TEST(CpuOpcode, CpuOpcode_LD_A_R16MEM) {
     auto opcode = prefix << 6 | dstcode << 4 | suffix;
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_LD_A_R16MEM)
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_LD_A_R16MEM)
         << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8) << subtest;
@@ -110,7 +110,7 @@ TEST(CpuOpcode, CpuOpcode_LD_IMM16MEM_SP) {
   auto opcode = 0x08;
   auto operation = Opcode::decode(opcode, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_LD_IMM16MEM_SP);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_LD_IMM16MEM_SP);
 
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::IMM16);
   EXPECT_TRUE(operation.getOperand1().isDereferenced());
@@ -136,7 +136,7 @@ TEST(CpuOpcode, CpuOpcode_INC_R16) {
     auto opcode = prefix << 6 | dstcode << 4 | suffix;
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_INC_R16) << subtest;
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_INC_R16) << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R16) << subtest;
     EXPECT_EQ(operation.getOperand1().getReg16(), operand) << subtest;
@@ -163,7 +163,7 @@ TEST(CpuOpcode, CpuOpcode_DEC_R16) {
     auto opcode = prefix << 6 | dstcode << 4 | suffix;
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_DEC_R16) << subtest;
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_DEC_R16) << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R16) << subtest;
     EXPECT_EQ(operation.getOperand1().getReg16(), operand) << subtest;
@@ -190,7 +190,7 @@ TEST(CpuOpcode, CpuOpcode_ADD_HL_R16) {
     auto opcode = prefix << 6 | dstcode << 4 | suffix;
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_ADD_HL_R16)
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_ADD_HL_R16)
         << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R16) << subtest;
@@ -251,7 +251,7 @@ TEST(CpuOpcode, CpuOpcode_INC_R8) {
 
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_INC_R8) << subtest;
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_INC_R8) << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8) << subtest;
     EXPECT_EQ(operation.getOperand1().getReg8(), op) << subtest;
@@ -265,7 +265,7 @@ TEST(CpuOpcode, CpuOpcode_INC_R8) {
   uint8_t opcode = (prefix << 6) | (0x06 << 3) | suffix;
   auto operation = Opcode::decode(opcode, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_INC_R8);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_INC_R8);
 
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R16);
   EXPECT_EQ(operation.getOperand1().getReg16(), CPURegister16Enum::HL);
@@ -322,7 +322,7 @@ TEST(CpuOpcode, CpuOpcode_DEC_R8) {
 
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_DEC_R8) << subtest;
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_DEC_R8) << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8) << subtest;
     EXPECT_EQ(operation.getOperand1().getReg8(), op) << subtest;
@@ -336,7 +336,7 @@ TEST(CpuOpcode, CpuOpcode_DEC_R8) {
   uint8_t opcode = (prefix << 6) | (0x06 << 3) | suffix;
   auto operation = Opcode::decode(opcode, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_DEC_R8);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_DEC_R8);
 
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R16);
   EXPECT_EQ(operation.getOperand1().getReg16(), CPURegister16Enum::HL);
@@ -393,7 +393,7 @@ TEST(CpuOpcode, CpuOpcode_LD_R8_IMM8) {
 
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_LD_R8_IMM8)
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_LD_R8_IMM8)
         << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8) << subtest;
@@ -409,7 +409,7 @@ TEST(CpuOpcode, CpuOpcode_LD_R8_IMM8) {
   uint8_t opcode = (prefix << 6) | (0x06 << 3) | suffix;
   auto operation = Opcode::decode(opcode, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_LD_R8_IMM8);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_LD_R8_IMM8);
 
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R16);
   EXPECT_EQ(operation.getOperand1().getReg16(), CPURegister16Enum::HL);
@@ -422,7 +422,7 @@ TEST(CpuOpcode, CpuOpcode_LD_R8_IMM8) {
 TEST(CpuOpcode, CpuOpcode_RLCA) {
   auto operation = Opcode::decode(0x07, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_RLCA);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_RLCA);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::NO_OPERAND);
   EXPECT_EQ(operation.getOperand2().getType(), CPUOperandTypeEnum::NO_OPERAND);
 }
@@ -430,7 +430,7 @@ TEST(CpuOpcode, CpuOpcode_RLCA) {
 TEST(CpuOpcode, CpuOpcode_RRCA) {
   auto operation = Opcode::decode(0x0F, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_RRCA);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_RRCA);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::NO_OPERAND);
   EXPECT_EQ(operation.getOperand2().getType(), CPUOperandTypeEnum::NO_OPERAND);
 }
@@ -438,7 +438,7 @@ TEST(CpuOpcode, CpuOpcode_RRCA) {
 TEST(CpuOpcode, CpuOpcode_RLA) {
   auto operation = Opcode::decode(0x17, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_RLA);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_RLA);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::NO_OPERAND);
   EXPECT_EQ(operation.getOperand2().getType(), CPUOperandTypeEnum::NO_OPERAND);
 }
@@ -446,7 +446,7 @@ TEST(CpuOpcode, CpuOpcode_RLA) {
 TEST(CpuOpcode, CpuOpcode_RRA) {
   auto operation = Opcode::decode(0x1F, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_RRA);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_RRA);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::NO_OPERAND);
   EXPECT_EQ(operation.getOperand2().getType(), CPUOperandTypeEnum::NO_OPERAND);
 }
@@ -454,7 +454,7 @@ TEST(CpuOpcode, CpuOpcode_RRA) {
 TEST(CpuOpcode, CpuOpcode_DAA) {
   auto operation = Opcode::decode(0x27, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_DAA);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_DAA);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::NO_OPERAND);
   EXPECT_EQ(operation.getOperand2().getType(), CPUOperandTypeEnum::NO_OPERAND);
 }
@@ -462,7 +462,7 @@ TEST(CpuOpcode, CpuOpcode_DAA) {
 TEST(CpuOpcode, CpuOpcode_CPL) {
   auto operation = Opcode::decode(0x2F, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_CPL);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_CPL);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::NO_OPERAND);
   EXPECT_EQ(operation.getOperand2().getType(), CPUOperandTypeEnum::NO_OPERAND);
 }
@@ -470,7 +470,7 @@ TEST(CpuOpcode, CpuOpcode_CPL) {
 TEST(CpuOpcode, CpuOpcode_SCF) {
   auto operation = Opcode::decode(0x37, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_SCF);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_SCF);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::NO_OPERAND);
   EXPECT_EQ(operation.getOperand2().getType(), CPUOperandTypeEnum::NO_OPERAND);
 }
@@ -478,7 +478,7 @@ TEST(CpuOpcode, CpuOpcode_SCF) {
 TEST(CpuOpcode, CpuOpcode_CCF) {
   auto operation = Opcode::decode(0x3F, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_CCF);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_CCF);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::NO_OPERAND);
   EXPECT_EQ(operation.getOperand2().getType(), CPUOperandTypeEnum::NO_OPERAND);
 }
@@ -486,7 +486,7 @@ TEST(CpuOpcode, CpuOpcode_CCF) {
 TEST(CpuOpcode, CpuOpcode_JR_IMM8) {
   auto operation = Opcode::decode(0x18, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_JR_IMM8);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_JR_IMM8);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::IMM8);
   EXPECT_EQ(operation.getOperand2().getType(), CPUOperandTypeEnum::NO_OPERAND);
 }
@@ -522,7 +522,7 @@ TEST(CpuOpcode, CpuOpcode_JR_COND_IMM8) {
 
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_JR_COND_IMM8)
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_JR_COND_IMM8)
         << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::CONDITION)
@@ -538,7 +538,7 @@ TEST(CpuOpcode, CpuOpcode_JR_COND_IMM8) {
 TEST(CpuOpcode, CpuOpcode_STOP) {
   auto operation = Opcode::decode(0x10, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_0_STOP);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_0_STOP);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::NO_OPERAND);
   EXPECT_EQ(operation.getOperand2().getType(), CPUOperandTypeEnum::NO_OPERAND);
 }
@@ -547,7 +547,7 @@ TEST(CpuOpcode, CpuOpcode_STOP) {
 
 TEST(CpuOpcode, CpuOpcode_LD_R8_R8) {
   auto prefix = 0x01;
-  auto operation_type = CPUOperationTypeEnum::BLOCK_1_LD_R8_R8;
+  auto operation_type = CPUOperationIdEnum::BLOCK_1_LD_R8_R8;
 
   // Table: opcode dest, src -> operand1, operand2
   auto table = std::vector<std::tuple<std::string, uint8_t, CPURegister8Enum>>({
@@ -598,7 +598,7 @@ TEST(CpuOpcode, CpuOpcode_LD_R8_R8) {
 
       auto operation = Opcode::decode(opcode, false);
 
-      EXPECT_EQ(operation.getType(), operation_type) << subtest_msg;
+      EXPECT_EQ(operation.getId(), operation_type) << subtest_msg;
 
       EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8)
           << subtest_msg;
@@ -617,7 +617,7 @@ TEST(CpuOpcode, CpuOpcode_LD_R8_R8) {
   auto opcode = (prefix << 6) | (0x06 << 3) | 0x07;
   auto operation = Opcode::decode(opcode, false);
   
-  EXPECT_EQ(operation.getType(), operation_type) << opcode;
+  EXPECT_EQ(operation.getId(), operation_type) << opcode;
 
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R16);
   EXPECT_EQ(operation.getOperand1().getReg16(), CPURegister16Enum::HL);
@@ -631,7 +631,7 @@ TEST(CpuOpcode, CpuOpcode_LD_R8_R8) {
 TEST(CpuOpcode, CpuOpcode_LD_HALT) {
   auto operation = Opcode::decode(0x76, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_1_LD_HALT);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_1_LD_HALT);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::NO_OPERAND);
   EXPECT_EQ(operation.getOperand2().getType(), CPUOperandTypeEnum::NO_OPERAND);
 }
@@ -685,7 +685,7 @@ TEST(CpuOpcode, CpuOpcode_ADD_A_R8) {
 
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_2_ADD_A_R8) << subtest;
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_2_ADD_A_R8) << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8) << subtest;
     EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A) << subtest;
@@ -700,7 +700,7 @@ TEST(CpuOpcode, CpuOpcode_ADD_A_R8) {
   uint8_t opcode = prefix | 0x06;
   auto operation = Opcode::decode(opcode, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_2_ADD_A_R8);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_2_ADD_A_R8);
 
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8);
   EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A);
@@ -758,7 +758,7 @@ TEST(CpuOpcode, CpuOpcode_ADC_A_R8) {
 
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_2_ADC_A_R8) << subtest;
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_2_ADC_A_R8) << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8) << subtest;
     EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A) << subtest;
@@ -773,7 +773,7 @@ TEST(CpuOpcode, CpuOpcode_ADC_A_R8) {
   uint8_t opcode = prefix | 0x06;
   auto operation = Opcode::decode(opcode, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_2_ADC_A_R8);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_2_ADC_A_R8);
 
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8);
   EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A);
@@ -831,7 +831,7 @@ TEST(CpuOpcode, CpuOpcode_SUB_A_R8) {
 
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_2_SUB_A_R8) << subtest;
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_2_SUB_A_R8) << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8) << subtest;
     EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A) << subtest;
@@ -846,7 +846,7 @@ TEST(CpuOpcode, CpuOpcode_SUB_A_R8) {
   uint8_t opcode = prefix | 0x06;
   auto operation = Opcode::decode(opcode, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_2_SUB_A_R8);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_2_SUB_A_R8);
 
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8);
   EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A);
@@ -904,7 +904,7 @@ TEST(CpuOpcode, CpuOpcode_SBC_A_R8) {
 
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_2_SBC_A_R8) << subtest;
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_2_SBC_A_R8) << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8) << subtest;
     EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A) << subtest;
@@ -919,7 +919,7 @@ TEST(CpuOpcode, CpuOpcode_SBC_A_R8) {
   uint8_t opcode = prefix | 0x06;
   auto operation = Opcode::decode(opcode, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_2_SBC_A_R8);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_2_SBC_A_R8);
 
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8);
   EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A);
@@ -977,7 +977,7 @@ TEST(CpuOpcode, CpuOpcode_AND_A_R8) {
 
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_2_AND_A_R8) << subtest;
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_2_AND_A_R8) << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8) << subtest;
     EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A) << subtest;
@@ -992,7 +992,7 @@ TEST(CpuOpcode, CpuOpcode_AND_A_R8) {
   uint8_t opcode = prefix | 0x06;
   auto operation = Opcode::decode(opcode, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_2_AND_A_R8);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_2_AND_A_R8);
 
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8);
   EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A);
@@ -1050,7 +1050,7 @@ TEST(CpuOpcode, CpuOpcode_XOR_A_R8) {
 
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_2_XOR_A_R8) << subtest;
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_2_XOR_A_R8) << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8) << subtest;
     EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A) << subtest;
@@ -1065,7 +1065,7 @@ TEST(CpuOpcode, CpuOpcode_XOR_A_R8) {
   uint8_t opcode = prefix | 0x06;
   auto operation = Opcode::decode(opcode, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_2_XOR_A_R8);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_2_XOR_A_R8);
 
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8);
   EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A);
@@ -1123,7 +1123,7 @@ TEST(CpuOpcode, CpuOpcode_OR_A_R8) {
 
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_2_OR_A_R8) << subtest;
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_2_OR_A_R8) << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8) << subtest;
     EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A) << subtest;
@@ -1138,7 +1138,7 @@ TEST(CpuOpcode, CpuOpcode_OR_A_R8) {
   uint8_t opcode = prefix | 0x06;
   auto operation = Opcode::decode(opcode, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_2_OR_A_R8);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_2_OR_A_R8);
 
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8);
   EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A);
@@ -1196,7 +1196,7 @@ TEST(CpuOpcode, CpuOpcode_CP_A_R8) {
 
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_2_CP_A_R8) << subtest;
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_2_CP_A_R8) << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8) << subtest;
     EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A) << subtest;
@@ -1210,7 +1210,7 @@ TEST(CpuOpcode, CpuOpcode_CP_A_R8) {
   // Exception mapping for 0x06 [HL]
   uint8_t opcode = prefix | 0x06;
   auto operation = Opcode::decode(opcode, false);
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_2_CP_A_R8);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_2_CP_A_R8);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8);
   EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A);
   EXPECT_FALSE(operation.getOperand1().isDereferenced());
@@ -1225,7 +1225,7 @@ TEST(CpuOpcode, CpuOpcode_CP_A_R8) {
 TEST(CPUOpcode, CpuOpcode_ADD_A_IMM8) {
   auto operation = Opcode::decode(0xC6, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_ADD_A_IMM8);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_ADD_A_IMM8);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8);
   EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A);
 
@@ -1236,7 +1236,7 @@ TEST(CPUOpcode, CpuOpcode_ADD_A_IMM8) {
 TEST(CpuOpcode, CpuOpcode_ADC_A_IMM8) {
   auto operation = Opcode::decode(0xCE, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_ADC_A_IMM8);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_ADC_A_IMM8);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8);
   EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A);
 
@@ -1247,7 +1247,7 @@ TEST(CpuOpcode, CpuOpcode_ADC_A_IMM8) {
 TEST(CpuOpcode, CpuOpcode_SUB_A_IMM8) {
   auto operation = Opcode::decode(0xD6, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_SUB_A_IMM8);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_SUB_A_IMM8);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8);
   EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A);
 
@@ -1258,7 +1258,7 @@ TEST(CpuOpcode, CpuOpcode_SUB_A_IMM8) {
 TEST(CpuOpcode, CpuOpcode_SBC_A_IMM8) {
   auto operation = Opcode::decode(0xDE, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_SBC_A_IMM8);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_SBC_A_IMM8);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8);
   EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A);
 
@@ -1269,7 +1269,7 @@ TEST(CpuOpcode, CpuOpcode_SBC_A_IMM8) {
 TEST(CpuOpcode, CpuOpcode_AND_A_IMM8) {
   auto operation = Opcode::decode(0xE6, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_AND_A_IMM8);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_AND_A_IMM8);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8);
   EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A);
 
@@ -1280,7 +1280,7 @@ TEST(CpuOpcode, CpuOpcode_AND_A_IMM8) {
 TEST(CpuOpcode, CpuOpcode_XOR_A_IMM8) {
   auto operation = Opcode::decode(0xEE, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_XOR_A_IMM8);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_XOR_A_IMM8);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8);
   EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A);
 
@@ -1291,7 +1291,7 @@ TEST(CpuOpcode, CpuOpcode_XOR_A_IMM8) {
 TEST(CpuOpcode, CpuOpcode_OR_A_IMM8) {
   auto operation = Opcode::decode(0xF6, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_OR_A_IMM8);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_OR_A_IMM8);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8);
   EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A);
 
@@ -1302,7 +1302,7 @@ TEST(CpuOpcode, CpuOpcode_OR_A_IMM8) {
 TEST(CpuOpcode, CpuOpcode_CP_A_IMM8) {
   auto operation = Opcode::decode(0xFE, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_CP_A_IMM8);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_CP_A_IMM8);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8);
   EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A);
 
@@ -1341,7 +1341,7 @@ TEST(CpuOpcode, CpuOpcode_RET_COND) {
 
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_RET_COND) << subtest;
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_RET_COND) << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::CONDITION)
         << subtest;
@@ -1355,7 +1355,7 @@ TEST(CpuOpcode, CpuOpcode_RET_COND) {
 TEST(CpuOpcode, CpuOpcode_RET) {
   auto operation = Opcode::decode(0xC9, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_RET);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_RET);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::NO_OPERAND);
   EXPECT_EQ(operation.getOperand2().getType(), CPUOperandTypeEnum::NO_OPERAND);
 }
@@ -1363,7 +1363,7 @@ TEST(CpuOpcode, CpuOpcode_RET) {
 TEST(CpuOpcode, CpuOpcode_RETI) {
   auto operation = Opcode::decode(0xD9, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_RETI);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_RETI);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::NO_OPERAND);
   EXPECT_EQ(operation.getOperand2().getType(), CPUOperandTypeEnum::NO_OPERAND);
 }
@@ -1400,7 +1400,7 @@ TEST(CpuOpcode, CpuOpcode_JP_COND_IMM16) {
 
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_JP_COND_IMM16)
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_JP_COND_IMM16)
         << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::CONDITION)
@@ -1415,7 +1415,7 @@ TEST(CpuOpcode, CpuOpcode_JP_COND_IMM16) {
 TEST(CpuOpcode, CpuOpcode_JP_IMM16) {
   auto operation = Opcode::decode(0xC3, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_JP_IMM16);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_JP_IMM16);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::IMM16);
   EXPECT_EQ(operation.getOperand2().getType(), CPUOperandTypeEnum::NO_OPERAND);
 }
@@ -1423,7 +1423,7 @@ TEST(CpuOpcode, CpuOpcode_JP_IMM16) {
 TEST(CpuOpcode, CpuOpcode_JP_HL) {
   auto operation = Opcode::decode(0xE9, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_JP_HL);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_JP_HL);
 
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R16);
   EXPECT_EQ(operation.getOperand1().getReg16(), CPURegister16Enum::HL);
@@ -1463,7 +1463,7 @@ TEST(CpuOpcode, CpuOpcode_CALL_COND_IMM16) {
 
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_CALL_COND_IMM16)
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_CALL_COND_IMM16)
         << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::CONDITION)
@@ -1478,7 +1478,7 @@ TEST(CpuOpcode, CpuOpcode_CALL_COND_IMM16) {
 TEST(CpuOpcode, CpuOpcode_CALL_IMM16) {
   auto operation = Opcode::decode(0xCD, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_CALL_IMM16);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_CALL_IMM16);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::IMM16);
   EXPECT_EQ(operation.getOperand2().getType(), CPUOperandTypeEnum::NO_OPERAND);
 }
@@ -1536,7 +1536,7 @@ TEST(CpuOpcode, CpuOpcode_RST_TGT3) {
 
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_RST_TGT3) << subtest;
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_RST_TGT3) << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::LITERAL)
         << subtest;
@@ -1581,7 +1581,7 @@ TEST(CpuOpcode, CpuOpcode_POP_R16_STK) {
 
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_POP_R16_STK)
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_POP_R16_STK)
         << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R16) << subtest;
@@ -1626,7 +1626,7 @@ TEST(CpuOpcode, CpuOpcode_PUSH_R16_STK) {
 
     auto operation = Opcode::decode(opcode, false);
 
-    EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_PUSH_R16_STK)
+    EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_PUSH_R16_STK)
         << subtest;
 
     EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R16) << subtest;
@@ -1640,7 +1640,7 @@ TEST(CpuOpcode, CpuOpcode_PUSH_R16_STK) {
 TEST(CpuOpcode, CpuOpcode_LD_CMEM_A) {
   auto operation = Opcode::decode(0xE2, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_LD_CMEM_A);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_LD_CMEM_A);
 
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8);
   EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::C);
@@ -1654,7 +1654,7 @@ TEST(CpuOpcode, CpuOpcode_LD_CMEM_A) {
 TEST(CpuOpcode, CpuOpcode_LD_IMM8MEM_A) {
   auto operation = Opcode::decode(0xE0, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_LD_IMM8MEM_A);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_LD_IMM8MEM_A);
 
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::IMM8);
   EXPECT_TRUE(operation.getOperand1().isDereferenced());
@@ -1667,7 +1667,7 @@ TEST(CpuOpcode, CpuOpcode_LD_IMM8MEM_A) {
 TEST(CpuOpcode, CpuOpcode_LD_IMM16_MEM_A) {
   auto operation = Opcode::decode(0xEA, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_LD_IMM16MEM_A);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_LD_IMM16MEM_A);
 
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::IMM16);
   EXPECT_TRUE(operation.getOperand1().isDereferenced());
@@ -1680,7 +1680,7 @@ TEST(CpuOpcode, CpuOpcode_LD_IMM16_MEM_A) {
 TEST(CpuOpcode, CpuOpcode_LD_A_CMEM) {
   auto operation = Opcode::decode(0xF2, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_LD_A_CMEM);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_LD_A_CMEM);
 
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8);
   EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A);
@@ -1694,7 +1694,7 @@ TEST(CpuOpcode, CpuOpcode_LD_A_CMEM) {
 TEST(CpuOpcode, CpuOpcode_LD_A_IMM8MEM) {
   auto operation = Opcode::decode(0xF0, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_LD_A_IMM8MEM);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_LD_A_IMM8MEM);
 
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8);
   EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A);
@@ -1707,7 +1707,7 @@ TEST(CpuOpcode, CpuOpcode_LD_A_IMM8MEM) {
 TEST(CpuOpcode, CpuOpcode_LD_A_IMM16_MEM) {
   auto operation = Opcode::decode(0xFA, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_LD_A_IMM16MEM);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_LD_A_IMM16MEM);
 
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8);
   EXPECT_EQ(operation.getOperand1().getReg8(), CPURegister8Enum::A);
@@ -1720,7 +1720,7 @@ TEST(CpuOpcode, CpuOpcode_LD_A_IMM16_MEM) {
 TEST(CpuOpcode, CpuOpcode_DI) {
   auto operation = Opcode::decode(0xF3, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_DI);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_DI);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::NO_OPERAND);
   EXPECT_EQ(operation.getOperand2().getType(), CPUOperandTypeEnum::NO_OPERAND);
 }
@@ -1728,7 +1728,7 @@ TEST(CpuOpcode, CpuOpcode_DI) {
 TEST(CpuOpcode, CpuOpcode_EI) {
   auto operation = Opcode::decode(0xFB, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_EI);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_EI);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::NO_OPERAND);
   EXPECT_EQ(operation.getOperand2().getType(), CPUOperandTypeEnum::NO_OPERAND);
 }
@@ -1736,21 +1736,21 @@ TEST(CpuOpcode, CpuOpcode_EI) {
 TEST(CpuOpcode, CpuOpcode_CB_PREFIX_OP) {
   auto operation = Opcode::decode(0xCB, false);
 
-  EXPECT_EQ(operation.getType(), CPUOperationTypeEnum::BLOCK_3_CB_PREFIX);
+  EXPECT_EQ(operation.getId(), CPUOperationIdEnum::BLOCK_3_CB_PREFIX);
   EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::NO_OPERAND);
   EXPECT_EQ(operation.getOperand2().getType(), CPUOperandTypeEnum::NO_OPERAND);
 }
 
 TEST(CpuOpcode, CpuOpcode_CB_PREFIX_INSTRUCTIONS) {
-  auto prefix_table = std::vector<std::tuple<std::string, uint8_t, CPUOperationTypeEnum>>({
-      {"RLC", 0x00, CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RLC_R8},
-      {"RRC", 0x08, CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RRC_R8},
-      {"RL", 0x10, CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RL_R8},
-      {"RR", 0x18, CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RR_R8},
-      {"SLA", 0x20, CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SLA_R8},
-      {"SRA", 0x28, CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRA_R8},
-      {"SWAP", 0x30, CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SWAP_R8},
-      {"SRL", 0x38, CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SRL_R8}
+  auto prefix_table = std::vector<std::tuple<std::string, uint8_t, CPUOperationIdEnum>>({
+      {"RLC", 0x00, CPUOperationIdEnum::BLOCK_3_CB_PREFIX_RLC_R8},
+      {"RRC", 0x08, CPUOperationIdEnum::BLOCK_3_CB_PREFIX_RRC_R8},
+      {"RL", 0x10, CPUOperationIdEnum::BLOCK_3_CB_PREFIX_RL_R8},
+      {"RR", 0x18, CPUOperationIdEnum::BLOCK_3_CB_PREFIX_RR_R8},
+      {"SLA", 0x20, CPUOperationIdEnum::BLOCK_3_CB_PREFIX_SLA_R8},
+      {"SRA", 0x28, CPUOperationIdEnum::BLOCK_3_CB_PREFIX_SRA_R8},
+      {"SWAP", 0x30, CPUOperationIdEnum::BLOCK_3_CB_PREFIX_SWAP_R8},
+      {"SRL", 0x38, CPUOperationIdEnum::BLOCK_3_CB_PREFIX_SRL_R8}
   });
 
   auto table = std::vector<std::tuple<std::string, uint8_t, CPURegister8Enum>>({
@@ -1799,7 +1799,7 @@ TEST(CpuOpcode, CpuOpcode_CB_PREFIX_INSTRUCTIONS) {
 
       auto operation = Opcode::decode(opcode, true);
 
-      EXPECT_EQ(operation.getType(), prefix_op) << subtest;
+      EXPECT_EQ(operation.getId(), prefix_op) << subtest;
 
       EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::R8)
           << subtest;
@@ -1813,10 +1813,10 @@ TEST(CpuOpcode, CpuOpcode_CB_PREFIX_INSTRUCTIONS) {
 }
 
 TEST(CpuOpcode, CpuOpcode_CB_PREFIX_BIT_RES_SET_B3_R8) {
-  auto prefix_table = std::vector<std::tuple<std::string, uint8_t, CPUOperationTypeEnum>>({
-      {"BIT B3", 0x40, CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8},
-      {"RES B3", 0x80, CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_RES_B3_R8},
-      {"SET B3", 0xC0, CPUOperationTypeEnum::BLOCK_3_CB_PREFIX_SET_B3_R8}
+  auto prefix_table = std::vector<std::tuple<std::string, uint8_t, CPUOperationIdEnum>>({
+      {"BIT B3", 0x40, CPUOperationIdEnum::BLOCK_3_CB_PREFIX_BIT_B3_R8},
+      {"RES B3", 0x80, CPUOperationIdEnum::BLOCK_3_CB_PREFIX_RES_B3_R8},
+      {"SET B3", 0xC0, CPUOperationIdEnum::BLOCK_3_CB_PREFIX_SET_B3_R8}
   });
 
   auto reg_table = std::vector<std::tuple<std::string, uint8_t, CPURegister8Enum>>({
@@ -1865,7 +1865,7 @@ TEST(CpuOpcode, CpuOpcode_CB_PREFIX_BIT_RES_SET_B3_R8) {
         uint8_t opcode = prefix_dest | i << 3 | dest;
         auto operation = Opcode::decode(opcode, true);
 
-        EXPECT_EQ(operation.getType(), prefix_op) << subtest;
+        EXPECT_EQ(operation.getId(), prefix_op) << subtest;
         
         EXPECT_EQ(operation.getOperand1().getType(), CPUOperandTypeEnum::LITERAL)
             << subtest;

@@ -20,14 +20,19 @@ static const uint8_t blockShift = 6;
 
 Opcode::Opcode(
   CPUOperationTypeEnum type,
+  CPUOperationIdEnum id,
   const CPUOperationOperand& op1,
   const CPUOperationOperand& op2  
-) : m_Type(type), m_Op1(op1), m_Op2(op2) {
+) : m_Type(type), m_Id(id), m_Op1(op1), m_Op2(op2) {
 
 }
 
 CPUOperationTypeEnum Opcode::getType() const {
   return m_Type;
+}
+
+CPUOperationIdEnum Opcode::getId() const {
+  return m_Id;
 }
 
 CPUOperationOperand Opcode::getOperand1() const {
