@@ -101,43 +101,43 @@ static const std::unordered_map<uint8_t, Opcode> block3Map = {
                             CPUOperationOperand::createLiteralOperand(0x38),
                             CPUOperationOperand::createNoOperand()}},
     // BLOCK_3_POP_R16_STK
-    {0xC1, Opcode{CPUOperationTypeEnum::TRANSFER,
+    {0xC1, Opcode{CPUOperationTypeEnum::PUSH_POP,
                             CPUOperationIdEnum::BLOCK_3_POP_R16_STK,
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::BC, false, false, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0xD1, Opcode{CPUOperationTypeEnum::TRANSFER,
+    {0xD1, Opcode{CPUOperationTypeEnum::PUSH_POP,
                             CPUOperationIdEnum::BLOCK_3_POP_R16_STK,
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::DE, false, false, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0xE1, Opcode{CPUOperationTypeEnum::TRANSFER,
+    {0xE1, Opcode{CPUOperationTypeEnum::PUSH_POP,
                             CPUOperationIdEnum::BLOCK_3_POP_R16_STK,
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, false, false, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0xF1, Opcode{CPUOperationTypeEnum::TRANSFER,
+    {0xF1, Opcode{CPUOperationTypeEnum::PUSH_POP,
                             CPUOperationIdEnum::BLOCK_3_POP_R16_STK,
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::AF, false, false, false),
                             CPUOperationOperand::createNoOperand()}},
     // BLOCK_3_PUSH_R16_STK
-    {0xC5, Opcode{CPUOperationTypeEnum::TRANSFER,
+    {0xC5, Opcode{CPUOperationTypeEnum::PUSH_POP,
                             CPUOperationIdEnum::BLOCK_3_PUSH_R16_STK,
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::BC, false, false, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0xD5, Opcode{CPUOperationTypeEnum::TRANSFER,
+    {0xD5, Opcode{CPUOperationTypeEnum::PUSH_POP,
                             CPUOperationIdEnum::BLOCK_3_PUSH_R16_STK,
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::DE, false, false, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0xE5, Opcode{CPUOperationTypeEnum::TRANSFER,
+    {0xE5, Opcode{CPUOperationTypeEnum::PUSH_POP,
                             CPUOperationIdEnum::BLOCK_3_PUSH_R16_STK,
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::HL, false, false, false),
                             CPUOperationOperand::createNoOperand()}},
-    {0xF5, Opcode{CPUOperationTypeEnum::TRANSFER,
+    {0xF5, Opcode{CPUOperationTypeEnum::PUSH_POP,
                             CPUOperationIdEnum::BLOCK_3_PUSH_R16_STK,
                             CPUOperationOperand::createReg16Operand(
                                 CPURegister16Enum::AF, false, false, false),

@@ -7,7 +7,7 @@ static const std::unordered_map<uint8_t, Opcode> block0Map = {
     // BLOCK_0_LD_R16_IMM16
     {0x01,
      Opcode{
-         CPUOperationTypeEnum::TRANSFER,
+         CPUOperationTypeEnum::LOAD_STORE,
          CPUOperationIdEnum::BLOCK_0_LD_R16_IMM16,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::BC, false,
                                                  false, false),
@@ -15,7 +15,7 @@ static const std::unordered_map<uint8_t, Opcode> block0Map = {
      }},
     {0x11,
      Opcode{
-         CPUOperationTypeEnum::TRANSFER,
+         CPUOperationTypeEnum::LOAD_STORE,
          CPUOperationIdEnum::BLOCK_0_LD_R16_IMM16,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::DE, false,
                                                  false, false),
@@ -23,7 +23,7 @@ static const std::unordered_map<uint8_t, Opcode> block0Map = {
      }},
     {0x21,
      Opcode{
-         CPUOperationTypeEnum::TRANSFER,
+         CPUOperationTypeEnum::LOAD_STORE,
          CPUOperationIdEnum::BLOCK_0_LD_R16_IMM16,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, false,
                                                  false, false),
@@ -31,7 +31,7 @@ static const std::unordered_map<uint8_t, Opcode> block0Map = {
      }},
     {0x31,
      Opcode{
-         CPUOperationTypeEnum::TRANSFER,
+         CPUOperationTypeEnum::LOAD_STORE,
          CPUOperationIdEnum::BLOCK_0_LD_R16_IMM16,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::SP, false,
                                                  false, false),
@@ -40,7 +40,7 @@ static const std::unordered_map<uint8_t, Opcode> block0Map = {
     // BLOCK_0_LD_R16MEM_A
     {0x02,
      Opcode{
-         CPUOperationTypeEnum::TRANSFER,
+         CPUOperationTypeEnum::LOAD_STORE,
          CPUOperationIdEnum::BLOCK_0_LD_R16MEM_A,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::BC, true,
                                                  false, false),
@@ -48,7 +48,7 @@ static const std::unordered_map<uint8_t, Opcode> block0Map = {
      }},
     {0x12,
      Opcode{
-         CPUOperationTypeEnum::TRANSFER,
+         CPUOperationTypeEnum::LOAD_STORE,
          CPUOperationIdEnum::BLOCK_0_LD_R16MEM_A,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::DE, true,
                                                  false, false),
@@ -56,7 +56,7 @@ static const std::unordered_map<uint8_t, Opcode> block0Map = {
      }},
     {0x22,
      Opcode{
-         CPUOperationTypeEnum::TRANSFER,
+         CPUOperationTypeEnum::LOAD_STORE,
          CPUOperationIdEnum::BLOCK_0_LD_R16MEM_A,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
                                                  true, false),
@@ -64,7 +64,7 @@ static const std::unordered_map<uint8_t, Opcode> block0Map = {
      }},
     {0x32,
      Opcode{
-         CPUOperationTypeEnum::TRANSFER,
+         CPUOperationTypeEnum::LOAD_STORE,
          CPUOperationIdEnum::BLOCK_0_LD_R16MEM_A,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
                                                  false, true),
@@ -73,7 +73,7 @@ static const std::unordered_map<uint8_t, Opcode> block0Map = {
     // BLOCK_0_LD_A_R16MEM
     {0x0A,
      Opcode{
-         CPUOperationTypeEnum::TRANSFER,
+         CPUOperationTypeEnum::LOAD_STORE,
          CPUOperationIdEnum::BLOCK_0_LD_A_R16MEM,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::BC, true,
@@ -81,7 +81,7 @@ static const std::unordered_map<uint8_t, Opcode> block0Map = {
      }},
     {0x1A,
      Opcode{
-         CPUOperationTypeEnum::TRANSFER,
+         CPUOperationTypeEnum::LOAD_STORE,
          CPUOperationIdEnum::BLOCK_0_LD_A_R16MEM,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::DE, true,
@@ -89,7 +89,7 @@ static const std::unordered_map<uint8_t, Opcode> block0Map = {
      }},
     {0x2A,
      Opcode{
-         CPUOperationTypeEnum::TRANSFER,
+         CPUOperationTypeEnum::LOAD_STORE,
          CPUOperationIdEnum::BLOCK_0_LD_A_R16MEM,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
@@ -97,7 +97,7 @@ static const std::unordered_map<uint8_t, Opcode> block0Map = {
      }},
     {0x3A,
      Opcode{
-         CPUOperationTypeEnum::TRANSFER,
+         CPUOperationTypeEnum::LOAD_STORE,
          CPUOperationIdEnum::BLOCK_0_LD_A_R16MEM,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
@@ -325,49 +325,49 @@ static const std::unordered_map<uint8_t, Opcode> block0Map = {
     // BLOCK_0_LD_R8_IMM8
     {0x06,
      Opcode{
-         CPUOperationTypeEnum::TRANSFER,
+         CPUOperationTypeEnum::LOAD_STORE,
          CPUOperationIdEnum::BLOCK_0_LD_R8_IMM8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::B, false),
          CPUOperationOperand::createImm8Operand(false),
      }},
     {0x0E,
      Opcode{
-         CPUOperationTypeEnum::TRANSFER,
+         CPUOperationTypeEnum::LOAD_STORE,
          CPUOperationIdEnum::BLOCK_0_LD_R8_IMM8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::C, false),
          CPUOperationOperand::createImm8Operand(false),
      }},
     {0x16,
      Opcode{
-         CPUOperationTypeEnum::TRANSFER,
+         CPUOperationTypeEnum::LOAD_STORE,
          CPUOperationIdEnum::BLOCK_0_LD_R8_IMM8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::D, false),
          CPUOperationOperand::createImm8Operand(false),
      }},
     {0x1E,
      Opcode{
-         CPUOperationTypeEnum::TRANSFER,
+         CPUOperationTypeEnum::LOAD_STORE,
          CPUOperationIdEnum::BLOCK_0_LD_R8_IMM8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::E, false),
          CPUOperationOperand::createImm8Operand(false),
      }},
     {0x26,
      Opcode{
-         CPUOperationTypeEnum::TRANSFER,
+         CPUOperationTypeEnum::LOAD_STORE,
          CPUOperationIdEnum::BLOCK_0_LD_R8_IMM8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::H, false),
          CPUOperationOperand::createImm8Operand(false),
      }},
     {0x2E,
      Opcode{
-         CPUOperationTypeEnum::TRANSFER,
+         CPUOperationTypeEnum::LOAD_STORE,
          CPUOperationIdEnum::BLOCK_0_LD_R8_IMM8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::L, false),
          CPUOperationOperand::createImm8Operand(false),
      }},
     {0x36,
      Opcode{
-         CPUOperationTypeEnum::TRANSFER,
+         CPUOperationTypeEnum::LOAD_STORE,
          CPUOperationIdEnum::BLOCK_0_LD_R8_IMM8,
          CPUOperationOperand::createReg16Operand(CPURegister16Enum::HL, true,
                                                  false, false),
@@ -375,7 +375,7 @@ static const std::unordered_map<uint8_t, Opcode> block0Map = {
      }},
     {0x3E,
      Opcode{
-         CPUOperationTypeEnum::TRANSFER,
+         CPUOperationTypeEnum::LOAD_STORE,
          CPUOperationIdEnum::BLOCK_0_LD_R8_IMM8,
          CPUOperationOperand::createReg8Operand(CPURegister8Enum::A, false),
          CPUOperationOperand::createImm8Operand(false),

@@ -9,7 +9,8 @@ namespace gehmboi::emulator {
 enum class CPUOperationTypeEnum
 {
   UNDEFINED = -1,
-  TRANSFER,
+  LOAD_STORE,
+  PUSH_POP,
   ALU,
   ROTATE_SHIFT,
   BITWISE,
