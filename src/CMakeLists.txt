@@ -9,6 +9,11 @@ add_library(
     cpu/cpu_registers.cpp
     cpu/cpu_opcode.cpp
     cpu/cpu_opcode.hpp
+
+    emulator/emulator_executor.cpp
+    emulator/emulator_executor.hpp
+    emulator/emulator_fetched_op.cpp
+    emulator/emulator_fetched_op.hpp
 )
 
 target_include_directories(
