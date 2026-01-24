@@ -13,11 +13,11 @@ void Executor::setRegisters(const CPURegisters& registers) {
 }
 
 void Executor::setMemory(const MemoryPtr& memoryPtr) {
-    m_Memory = memoryPtr;
+    m_memoryPtr = memoryPtr;
 }
 
 MemoryPtr& Executor::getMemory() noexcept {
-    return m_Memory;
+    return m_memoryPtr;
 }
 
 void Executor::execute(const FetchedOperation& fetchedOperation) {
@@ -33,8 +33,7 @@ void Executor::execute(const FetchedOperation& fetchedOperation) {
             executeLoadStore(fetchedOperation);
             break;
         case CPUOperationTypeEnum::PUSH_POP:
-            // executePushPop(fetchedOperation);
-            throw std::runtime_error("PUSH/POP not implemented yet in Executor");
+            executePushPop(fetchedOperation);
             break;
         case CPUOperationTypeEnum::ALU:
             executeALU(fetchedOperation);
@@ -57,7 +56,6 @@ void Executor::execute(const FetchedOperation& fetchedOperation) {
         case CPUOperationTypeEnum::SPECIFIC:
             executeSpecific(fetchedOperation);
             break;
-        // Execution logic for different CPU operation types would go here.
         default:
             throw std::runtime_error("Unsupported CPU operation type");
     }
@@ -100,7 +98,7 @@ void Executor::executeLoadStore(const FetchedOperation& fetchedOperation) {
                 throw std::runtime_error("Source value not 16bit or 8bit for dereferenced load");
             };
 
-            src8Value = m_Memory->readByte(address);
+            src8Value = m_memoryPtr->readByte(address);
         } else {
             src8Value = std::get<uint8_t>(srcValue);
         }
@@ -166,7 +164,7 @@ void Executor::executeLoadStore(const FetchedOperation& fetchedOperation) {
         }
 
         uint8_t src8Value = std::get<uint8_t>(srcValue);
-        m_Memory->writeByte(dstAddress, src8Value);
+        m_memoryPtr->writeByte(dstAddress, src8Value);
         return;
     }
 
@@ -187,8 +185,8 @@ void Executor::executeLoadStore(const FetchedOperation& fetchedOperation) {
         uint8_t lowerByte = src16Value & 0x00FF;
         uint8_t upperByte = (src16Value & 0xFF00) >> 8;
 
-        m_Memory->writeByte(dstAddress, lowerByte);
-        m_Memory->writeByte(dstAddress + 1, upperByte);
+        m_memoryPtr->writeByte(dstAddress, lowerByte);
+        m_memoryPtr->writeByte(dstAddress + 1, upperByte);
         return;
     }
 
@@ -198,12 +196,197 @@ void Executor::executeLoadStore(const FetchedOperation& fetchedOperation) {
     throw std::runtime_error("Unsupported LOAD_STORE operation in Executor");
 }
 
+void Executor::executePushPop(const FetchedOperation& fetchedOperation) {
+    auto opcode = fetchedOperation.getOpcode();
+    auto id = opcode.getId();
+
+    if (!(id == CPUOperationIdEnum::BLOCK_3_POP_R16_STK || 
+          id == CPUOperationIdEnum::BLOCK_3_PUSH_R16_STK)) {
+        throw std::runtime_error("Unsupported PUSH/POP operation in Executor");
+    }
+
+    if (id == CPUOperationIdEnum::BLOCK_3_PUSH_R16_STK) {
+        if (!std::holds_alternative<uint16_t>(fetchedOperation.getValue1())) {
+            throw std::runtime_error("PUSH operation expects 16bit value");
+        }
+
+        auto opValue = std::get<uint16_t>(fetchedOperation.getValue2());
+        uint8_t upperByte = (opValue & 0xFF00) >> 8;
+        uint8_t lowerByte = opValue & 0x00FF;
+
+        uint16_t sp = m_cpuRegisters.getR16(CPURegister16Enum::SP);
+
+        m_memoryPtr->writeByte(sp - 1, upperByte);
+        m_memoryPtr->writeByte(sp - 2, lowerByte);
+        m_cpuRegisters.setR16(CPURegister16Enum::SP, sp - 2);
+        return;
+    }
+
+    if (id == CPUOperationIdEnum::BLOCK_3_POP_R16_STK) {
+        if (!std::holds_alternative<uint16_t>(fetchedOperation.getValue1())) {
+            throw std::runtime_error("POP operation expects 16bit value");
+        }
+
+        auto reg16 = opcode.getOperand1().getReg16();
+        uint16_t sp = m_cpuRegisters.getR16(CPURegister16Enum::SP);
+        uint8_t lowerByte = m_memoryPtr->readByte(sp);
+        uint8_t upperByte = m_memoryPtr->readByte(sp + 1);
+
+        uint16_t opValue = (static_cast<uint16_t>(upperByte) << 8) | static_cast<uint16_t>(lowerByte);
+        
+        m_cpuRegisters.setR16(reg16, opValue);
+        m_cpuRegisters.setR16(CPURegister16Enum::SP, sp + 2);
+        return;
+    }
+}
+
 void Executor::executeALU(const FetchedOperation& fetchedOperation) {
-    // Implementation for ALU operation execution
+    auto opcode = fetchedOperation.getOpcode();
+    auto id = opcode.getId();
+
+    // ADD A, r8
+    // ADD A, imm8
+    // ADD A, [r16]
+    // ADD HL, r16
+    // ADD SP, imm8
+    if (id == CPUOperationIdEnum::BLOCK_0_ADD_HL_R16 ||
+        id == CPUOperationIdEnum::BLOCK_2_ADD_A_R8 ||
+        id == CPUOperationIdEnum::BLOCK_3_ADD_A_IMM8 ||
+        id == CPUOperationIdEnum::BLOCK_3_ADD_SP_IMM8) {
+        executeAdd(fetchedOperation);
+        return;
+    }
+
+    // ADC A, r8
+    // ADC A, imm8
+    if (id == CPUOperationIdEnum::BLOCK_2_ADC_A_R8 ||
+        id == CPUOperationIdEnum::BLOCK_3_ADC_A_IMM8) {
+        executeAdc(fetchedOperation);
+        return;
+    }
+
+    // SUB A, r8
+    // SUB A, imm8
+    if (id == CPUOperationIdEnum::BLOCK_2_SUB_A_R8 ||
+        id == CPUOperationIdEnum::BLOCK_3_SUB_A_IMM8) {
+        executeSub(fetchedOperation);
+        return;
+    }
+
+    // SBC A, r8
+    // SBC A, imm8
+    if (id == CPUOperationIdEnum::BLOCK_2_SBC_A_R8 ||
+        id == CPUOperationIdEnum::BLOCK_3_SBC_A_IMM8) {
+        executeSbc(fetchedOperation);
+        return;
+    }
+
+    // AND A, r8
+    // AND A, imm8
+    if (id == CPUOperationIdEnum::BLOCK_2_AND_A_R8 ||
+        id == CPUOperationIdEnum::BLOCK_3_AND_A_IMM8) {
+        executeAnd(fetchedOperation);
+        return;
+    }
+
+    // XOR A, r8
+    // XOR A, imm8
+    if (id == CPUOperationIdEnum::BLOCK_2_XOR_A_R8 ||
+        id == CPUOperationIdEnum::BLOCK_3_XOR_A_IMM8) {
+        executeXor(fetchedOperation);
+        return;
+    }
+
+    // OR A, r8
+    // OR A, imm8
+    if (id == CPUOperationIdEnum::BLOCK_2_OR_A_R8 ||
+        id == CPUOperationIdEnum::BLOCK_3_OR_A_IMM8) {
+        executeOr(fetchedOperation);
+        return;
+    }
+
+    // CP A, r8
+    // CP A, imm8
+    if (id == CPUOperationIdEnum::BLOCK_2_CP_A_R8 ||
+        id == CPUOperationIdEnum::BLOCK_3_CP_A_IMM8) {
+        executeCp(fetchedOperation);
+        return;
+    }
+
+    // INC r16
+    // INC r8
+    if (id == CPUOperationIdEnum::BLOCK_0_INC_R16 ||
+        id == CPUOperationIdEnum::BLOCK_0_INC_R8) {
+        executeInc(fetchedOperation);
+        return;
+    }
+
+    // DEC r16
+    // DEC r8
+    if (id == CPUOperationIdEnum::BLOCK_0_DEC_R16 ||
+        id == CPUOperationIdEnum::BLOCK_0_DEC_R8) {
+        executeDec(fetchedOperation);
+        return;
+    }
 }
 
 void Executor::executeRotateShift(const FetchedOperation& fetchedOperation) {
-    // Implementation for ROTATE/SHIFT operation execution
+    auto id = fetchedOperation.getOpcode().getId();
+
+    if (id == CPUOperationIdEnum::BLOCK_0_RLCA) {
+        // Implementation for RLCA operation execution
+        return;
+    }
+
+    if (id == CPUOperationIdEnum::BLOCK_0_RLA) {
+        // Implementation for RLA operation execution
+        return;
+    }
+
+    if (id == CPUOperationIdEnum::BLOCK_0_RRCA) {
+        // Implementation for RRCA operation execution
+        return;
+    }
+
+    if (id == CPUOperationIdEnum::BLOCK_3_CB_PREFIX_RLC_R8) {
+        // Implementation for RLC operation execution
+        return;
+    }
+
+    if (id == CPUOperationIdEnum::BLOCK_3_CB_PREFIX_RL_R8) {
+        // Implementation for RL operation execution
+        return;
+    }
+
+    if (id == CPUOperationIdEnum::BLOCK_3_CB_PREFIX_RRC_R8) {
+        // Implementation for RRC operation execution
+        return;
+    }
+
+    if (id == CPUOperationIdEnum::BLOCK_3_CB_PREFIX_RR_R8) {
+        // Implementation for RR operation execution
+        return;
+    }
+
+    if (id == CPUOperationIdEnum::BLOCK_3_CB_PREFIX_SLA_R8) {
+        // Implementation for SLA operation execution
+        return;
+    }
+
+    if (id == CPUOperationIdEnum::BLOCK_3_CB_PREFIX_SRA_R8) {
+        // Implementation for SRA operation execution
+        return;
+    }
+
+    if (id == CPUOperationIdEnum::BLOCK_3_CB_PREFIX_SRL_R8) {
+        // Implementation for SRL operation execution
+        return;
+    }
+
+    if (id == CPUOperationIdEnum::BLOCK_3_CB_PREFIX_SWAP_R8) {
+        // Implementation for SWAP operation execution
+        return;
+    }
 }
 
 void Executor::executeBitwise(const FetchedOperation& fetchedOperation) {
@@ -224,4 +407,44 @@ void Executor::executeReturn(const FetchedOperation& fetchedOperation) {
 
 void Executor::executeSpecific(const FetchedOperation& fetchedOperation) {
     // Implementation for SPECIFIC operation execution
+}
+
+void Executor::executeAdd(const FetchedOperation& fetchedOperation) {
+
+}
+
+void Executor::executeAdc(const FetchedOperation& fetchedOperation) {
+
+}
+
+void Executor::executeSub(const FetchedOperation& fetchedOperation) {
+
+}
+
+void Executor::executeSbc(const FetchedOperation& fetchedOperation) {
+
+}
+
+void Executor::executeAnd(const FetchedOperation& fetchedOperation) {
+
+}
+
+void Executor::executeXor(const FetchedOperation& fetchedOperation) {
+
+}
+
+void Executor::executeOr(const FetchedOperation& fetchedOperation) {
+
+}
+
+void Executor::executeCp(const FetchedOperation& fetchedOperation) {
+
+}
+
+void Executor::executeInc(const FetchedOperation& fetchedOperation) {
+
+}
+
+void Executor::executeDec(const FetchedOperation& fetchedOperation) {
+
 }

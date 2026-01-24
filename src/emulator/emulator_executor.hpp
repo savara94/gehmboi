@@ -18,6 +18,7 @@ class Executor {
 
   private:
     void executeLoadStore(const FetchedOperation& fetchedOperation);
+    void executePushPop(const FetchedOperation& fetchedOperation);
     void executeALU(const FetchedOperation& fetchedOperation);
     void executeRotateShift(const FetchedOperation& fetchedOperation);
     void executeBitwise(const FetchedOperation& fetchedOperation);
@@ -26,8 +27,19 @@ class Executor {
     void executeReturn(const FetchedOperation& fetchedOperation);
     void executeSpecific(const FetchedOperation& fetchedOperation);
 
+    void executeAdd(const FetchedOperation& fetchedOperation);
+    void executeAdc(const FetchedOperation& fetchedOperation);
+    void executeSub(const FetchedOperation& fetchedOperation);
+    void executeSbc(const FetchedOperation& fetchedOperation);
+    void executeAnd(const FetchedOperation& fetchedOperation);
+    void executeXor(const FetchedOperation& fetchedOperation);
+    void executeOr(const FetchedOperation& fetchedOperation);
+    void executeCp(const FetchedOperation& fetchedOperation);
+    void executeInc(const FetchedOperation& fetchedOperation);
+    void executeDec(const FetchedOperation& fetchedOperation);
+
     CPURegisters m_cpuRegisters;
-    MemoryPtr m_Memory;
+    MemoryPtr m_memoryPtr;
 };
 
 }
